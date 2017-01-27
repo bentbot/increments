@@ -1,0 +1,129 @@
+
+html
+head
+	title Increment
+	style.
+		body {
+			background: #f3f3f3;
+			margin: 15px 0 0 0;
+			padding: 0;
+		}
+		h1, h2, h3, h4 {
+			text-align: center;
+			font-family: sans-serif;
+		}
+		.candidates {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			text-align: center;
+			margin: 10px 0;
+		}
+
+		.candidate {
+			background: #afafaf;
+			display: inline-block;
+			width: 100px;
+			height: 75px;
+			color: white;
+			font-family: sans-serif;
+			font-size: 21px;
+			text-align: center;
+			padding: 25px 0 0 0;
+			margin: 0 20px 0 0;
+			cursor: pointer;
+		}
+		.candidate:last-child {
+			margin: 0 !important;
+		}
+		.red { background: #F44336; color: white; }
+		.blue { background: #1565C0; color: white; }
+		form {
+			text-align: center;
+		}
+		input {
+			text-align: center;
+			font-size: 21px;
+		}
+		.button {
+			font-size: 16px;
+			background: white;
+			border: 1px solid #cccccc;
+			border-radius: 4px;
+			margin-top: 10px;
+		}
+		ul.statistics {
+			padding: 0;
+			margin: 0;
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+		}
+		ul.statistics li {
+			display: inline-block;
+			font-family: sans-serif;
+			font-size: 20px;
+			text-align: center;
+			width: 49%;
+			padding: 20px 0;
+		}
+		ul.statistics li div {
+			font-size: 29px;
+		}
+		.error {
+			background: #f9ff56;
+			width: 50%;
+			margin: 0 auto;
+			text-align: center;
+			padding: 15px;
+			border-radius: 0px;
+			font-family: sans-serif;
+		}
+	script(src='/jquery.js')
+	script.
+		$( document ).ready(function() {
+			$('.candidate').on('mousedown keydown', function (e) {
+				console.log(e);	
+				if (e.type == "mousedown" || e.keyCode == 32 || e.keyCode == 13 ) {
+					 $('.vote').val( $(this).html() );
+				}
+			});
+			$('.button').on('keydown', function (e) {
+				console.log(e);
+				if (e.keyCode == 9) {
+					$(this).blur();
+					$('ul.candidates li:first-child').focus();
+				}
+			});
+		});
+		
+body
+	if error
+		.error
+			if votes
+				div You have already voted for #{votes.vote}. 
+				div #{votes.time}
+			else
+				div A validation error has occured. Your vote was not saved.
+	if vote
+		h1 You have voted for #{vote}
+	
+	if !vote & !statistics
+		h1 Cast your Vote
+		if candidates
+			ul.candidates
+				each candidate, number in candidates
+					li(tabindex=number+1 class="candidate " + candidate.color) #{candidate.name}
+
+		form(action="/vote" method="post")
+			input( class="vote" name="vote" )
+			input( type="hidden" name="instance" value=instance )
+			br
+			input( class="button" type="submit" value="Vote" )
+	if statistics
+		h1 Voting Statistics
+		h3 #{statistics.total} Votes
+		ul.statistics
+			each statistic, number in statistics.candidates
+				li(class=statistic.color style="width:"+statistic.percentage+"%") #{statistic.name}
+					div #{statistic.count}
