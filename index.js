@@ -1,14 +1,14 @@
 /* Define Canidates */
 var candidates = [
-    {name: 'Donald Trump', color: "red"},
-    {name: 'Hillary Clinton', color: 'blue' }
+    {name: 'Donald Trump', color: 'red'},
+    {name: 'Hillary Clinton', color: 'blue' } 
 ]
 
 /* Protection */
 
 // Cookies allow a web browser to cast only one ballot.
 // Keep in mind that cookies can be spoofed or cleared which can lead to false votes.
-var enableCookieProtection = true;
+var enableCookieProtection = false;
 
 // Add a hidden key to each browser instance ignore double-posts
 var enableInstanceKeyProtection = true;
@@ -193,11 +193,11 @@ function countVotes(cb) {
 
             // Run calculations for each candidate
             async.each( statistics, function ( statistic ) {
-
-                // Create a percentage for each candidate
-                statistic.percentage = statistic.count/total;
-                statistic.percentage = statistic.percentage*100;
-
+		if (statistic.count > 0) {
+	                // Create a percentage for each candidate
+        	        statistic.percentage = statistic.count/total;
+               		 statistic.percentage = (statistic.percentage*100).toFixed(1);
+		}
                 // Push the statistic to the calculation
                 calculations.candidates.push(statistic);
             });

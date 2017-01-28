@@ -38,6 +38,9 @@ head
 		}
 		.red { background: #F44336; color: white; }
 		.blue { background: #1565C0; color: white; }
+		.orange { background: #ff9800; color: white; }
+		.green { background: #4caf50; color: white; }
+		.skyblue { background: #4fc3f7; color: white; }
 		form {
 			text-align: center;
 		}
@@ -66,6 +69,8 @@ head
 			text-align: center;
 			width: 49%;
 			padding: 20px 0;
+			overflow: hidden;
+			height: 60px;
 		}
 		ul.statistics li div {
 			font-size: 29px;
@@ -125,5 +130,8 @@ body
 		h3 #{statistics.total} Votes
 		ul.statistics
 			each statistic, number in statistics.candidates
-				li(class=statistic.color style="width:"+statistic.percentage+"%") #{statistic.name}
-					div #{statistic.count}
+				if statistic.percentage > 0
+					li(class=statistic.color style="width:"+statistic.percentage+"%")
+						if statistic.percentage > 6
+							div #{statistic.name}
+							div #{statistic.count}
