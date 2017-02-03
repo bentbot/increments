@@ -32,6 +32,7 @@ head
 			padding: 25px 0 0 0;
 			margin: 0 20px 0 0;
 			cursor: pointer;
+			overflow: hidden;
 		}
 		.candidate:last-child {
 			margin: 0 !important;
@@ -40,6 +41,7 @@ head
 		.blue { background: #1565C0; color: white; }
 		.orange { background: #ff9800; color: white; }
 		.green { background: #4caf50; color: white; }
+		.purple { background: rgb(94, 0 , 154); color: white; }
 		.skyblue { background: #4fc3f7; color: white; }
 		form {
 			text-align: center;
@@ -61,6 +63,7 @@ head
 			position: absolute;
 			bottom: 0;
 			width: 100%;
+			background: #b6b6b6;
 		}
 		ul.statistics li {
 			display: inline-block;
@@ -73,7 +76,7 @@ head
 			height: 60px;
 		}
 		ul.statistics li div {
-			font-size: 29px;
+			font-size: 20px;
 		}
 		.error {
 			background: #f9ff56;
@@ -121,17 +124,18 @@ body
 					li(tabindex=number+1 class="candidate " + candidate.color) #{candidate.name}
 
 		form(action="/vote" method="post")
-			input( class="vote" name="vote" )
+			input( id="vote" class="vote" name="vote" )
 			input( type="hidden" name="instance" value=instance )
 			br
-			input( class="button" type="submit" value="Vote" )
+			input( class="button" type="submit" id="submit" value="Vote" )
 	if statistics
 		h1 Voting Statistics
 		h3 #{statistics.total} Votes
 		ul.statistics
 			each statistic, number in statistics.candidates
 				if statistic.percentage > 0
-					li(class=statistic.color style="width:"+statistic.percentage+"%")
+					li(class=statistic.color style="width:"+statistic.percentage+"%" data-count=statistic.count)
 						if statistic.percentage > 6
 							div #{statistic.name}
+						if statistic.percentage > 6
 							div #{statistic.count}

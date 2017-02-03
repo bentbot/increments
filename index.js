@@ -1,7 +1,7 @@
 /* Define Canidates */
 var candidates = [
-    {name: 'Donald Trump', color: 'red'},
-    {name: 'Hillary Clinton', color: 'blue' } 
+    { name: 'Hillary Clinton', color: 'blue' },
+    { name: 'Donald Trump', color: 'red' }
 ]
 
 /* Protection */
@@ -41,7 +41,7 @@ VoterSchema.pre('save', function (next) {
     fs.readFile('logs/votes.json', function (err, buffer) {
         if (err) throw (err);
         if (buffer) buffer = buffer+vote+',\n';
-        fs.writeFile('votes.json', buffer, function (err) {
+        fs.writeFile('logs/votes.json', buffer, function (err) {
             next();
         });
     });
@@ -124,7 +124,7 @@ app.post('/vote', function(request, responce) {
                         
                         // Add the unique cookie to the user's browser...
                         if (enableCookieProtection) responce.cookie('key', uniqueKey, { maxAge: 605000000 });
-                         responce.send('ok');
+                        responce.send('ok');
 
                         // Send a receipt of the vote
                         //responce.render('index', { vote: request.body.vote });
