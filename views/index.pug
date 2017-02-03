@@ -43,6 +43,39 @@ head
 		.green { background: #4caf50; color: white; }
 		.purple { background: rgb(94, 0 , 154); color: white; }
 		.skyblue { background: #4fc3f7; color: white; }
+		h1.red, h2.red, h3.red { 
+			color: #F44336; 
+			background: transparent;     
+			margin: 5px 0;
+		}
+		h1.blue, h2.blue, h3.blue { 
+			color: #1565C0; 
+			background: transparent;     
+			margin: 5px 0;
+		}
+		h1.orange, h2.orange, h3.orange { 
+			color: #ff9800; 
+			background: transparent;     
+			margin: 5px 0;
+		}
+		h1.green, h2.green, h3.green { 
+			color: #4caf50; 
+			background: transparent;     
+			margin: 5px 0;
+		}
+		h1.purple, h2.purple, h3.purple { 
+			color: rgb(94, 0 , 154); 
+			background: transparent;     
+			margin: 5px 0;
+		}
+		h1.skyblue, h2.skyblue, h3.skyblue { 
+			color: #4fc3f7; 
+			background: transparent;     
+			margin: 5px 0;
+		}
+		h2.projectedVotes {
+			margin: 0;
+		}
 		form {
 			text-align: center;
 		}
@@ -74,6 +107,7 @@ head
 			padding: 20px 0;
 			overflow: hidden;
 			height: 60px;
+			transition: all 0.2s linear;
 		}
 		ul.statistics li div {
 			font-size: 20px;
@@ -88,8 +122,26 @@ head
 			font-family: sans-serif;
 		}
 	script(src='/jquery.js')
+	script(src='//localhost:3000/socket.io/socket.io.js')
 	script.
+		var socket = io.connect('http://localhost:3000');
 		$( document ).ready(function() {
+			
+			socket.on('statistics', function (data) {
+
+				if (data.total) $('.total-votes').html(data.total + ' Votes');
+
+				if (data.projectedWinner) {
+					$('.projectedWinner').html(data.projectedWinner.name).attr('class', 'projectedWinner '+data.projectedWinner.color);
+				}
+
+				for (i = 0; i < data.candidates.length; i++) {
+					var candidate = data.candidates[i];
+					$('#'+candidate.id).css('width', candidate.percentage+'%').data('count', candidate.count);
+					$('#'+candidate.id+' .count').html(candidate.count);
+				}
+			});
+
 			$('.candidate').on('mousedown keydown', function (e) {
 				console.log(e);	
 				if (e.type == "mousedown" || e.keyCode == 32 || e.keyCode == 13 ) {
@@ -103,6 +155,7 @@ head
 					$('ul.candidates li:first-child').focus();
 				}
 			});
+
 		});
 		
 body
@@ -130,12 +183,15 @@ body
 			input( class="button" type="submit" id="submit" value="Vote" )
 	if statistics
 		h1 Voting Statistics
-		h3 #{statistics.total} Votes
+		h3.total-votes #{statistics.total} Votes
+		if statistics.projectedWinner
+			h2.projectedVotes Projected Winner
+			h1.projectedWinner( class=statistics.projectedWinner.color ) #{statistics.projectedWinner.name}
 		ul.statistics
 			each statistic, number in statistics.candidates
 				if statistic.percentage > 0
-					li(class=statistic.color style="width:"+statistic.percentage+"%" data-count=statistic.count)
+					li(class=statistic.color id=statistic.id style="width:"+statistic.percentage+"%" data-count=statistic.count)
 						if statistic.percentage > 6
-							div #{statistic.name}
+							div.name #{statistic.name}
 						if statistic.percentage > 6
-							div #{statistic.count}
+							div.count #{statistic.count}

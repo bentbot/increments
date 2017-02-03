@@ -11,11 +11,16 @@ var candidates = [
 var enableCookieProtection = false;
 
 // Add a hidden key to each browser instance ignore double-posts
-var enableInstanceKeyProtection = true;
+var enableInstanceKeyProtection = false;
 
 // Security settings
+var webPort = 8000;
+var ioPort = 3000;
 var randomBytesLength = 48;
 var randomBufferString = 'hex';
+
+// Vote Logging
+var logToFile = true;
 
 
 /* Start the database connection */
@@ -37,15 +42,23 @@ var fs = require('fs');
 VoterSchema.pre('save', function (next) {
     var vote = this;
 
-    // Save votes to a backup file before adding them to the database
-    fs.readFile('logs/votes.json', function (err, buffer) {
-        if (err) throw (err);
-        if (buffer) buffer = buffer+vote+',\n';
-        fs.writeFile('logs/votes.json', buffer, function (err) {
-            next();
+    if (logToFile == true) {
+        // Save votes to a backup file before adding them to the database
+        fs.readFile('logs/votes.json', function (err, buffer) {
+            if (err) throw (err);
+            if (buffer) buffer = buffer+vote+',\n';
+            fs.writeFile('logs/votes.json', buffer, function (err) {
+                next();
+            });
         });
-    });
+    } else {
+        next();
+    }
 
+});
+
+VoterSchema.post('save', function (next) {
+    countVotes();
 });
 
 // Save the voter scheme
@@ -53,11 +66,11 @@ var Voter = db.model('voters', VoterSchema);
     
 /* Start Client Webserver */ 
 var express = require('express');
+var app = express(); 
 var async = require('async');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var pug = require('pug');
-var app = express(); 
 var instances = [];
 
 // Receive votes by accepting a posted message with bodyParser
@@ -120,14 +133,14 @@ app.post('/vote', function(request, responce) {
 
                 // Save the unique ballot to the database
                 ballot.save( function (error) {
-                    if (error) throw (error);
+                    if (error) responce.send('error');
                         
-                        // Add the unique cookie to the user's browser...
-                        if (enableCookieProtection) responce.cookie('key', uniqueKey, { maxAge: 605000000 });
-                        responce.send('ok');
+                    // Add the unique cookie to the user's browser...
+                    if (enableCookieProtection) responce.cookie('key', uniqueKey, { maxAge: 605000000 });
+                    responce.send('ok');
 
-                        // Send a receipt of the vote
-                        //responce.render('index', { vote: request.body.vote });
+                    // Send a receipt of the vote
+                    //responce.render('index', { vote: request.body.vote });
 
                 });
             });
@@ -142,20 +155,39 @@ app.get('/statistics', function( request, responce ) {
     countVotes(function (err, statistics) {
         if (err) throw (err)        
 
-        // Send a receipt of the vote
-                responce.render('index', {
+        var results = {
             candidates: candidates,
             statistics: statistics
-        });
+        }
+
+        // Send a receipt of the vote
+        responce.render('index', results );
+
+    });
+});
+
+app.get('/statistics/data', function( request, responce ) {
+    countVotes(function (err, statistics) {
+        if (err) throw (err)        
+
+        var results = {
+            candidates: candidates,
+            statistics: statistics
+        }
+
+        // Send a receipt of the vote
+        responce.send(results);
 
     });
 });
 
 
 // Start the webserver
-app.listen(8000);
+var chalk = require('chalk');
+app.listen(webPort);
+console.log(chalk.green.bold('Server started listening on port: '+webPort))
 
-
+var io = require('socket.io')(ioPort);
 /* Count votes */
 function countVotes(cb) {
     
@@ -170,11 +202,13 @@ function countVotes(cb) {
         Voter.count({ vote: name }, function (err, increments) {
             if (err) call(err);
             var percentage = 0;
+            var candidateID = name.replace(' ', '_').toLowerCase();
 
             // Write the total vote count to the statistics array
             statistics.push({
                 count: increments,
                 name: name,
+                id: candidateID,
                 color:  candidate.color,
                 percentage: 0
             });
@@ -186,27 +220,38 @@ function countVotes(cb) {
         // Check for errors
         if (err) throw (err);
         // A new calculation
-        var calculations = { candidates: [], total: 0 };
-        
+        var leading, calculations = { candidates: [], total: 0 };
+
         // Count total votes
         Voter.count({}, function (err, total) {
 
             // Run calculations for each candidate
             async.each( statistics, function ( statistic ) {
-		if (statistic.count > 0) {
-	                // Create a percentage for each candidate
-        	        statistic.percentage = statistic.count/total;
-               		 statistic.percentage = (statistic.percentage*100).toFixed(1);
-		}
+        		if (statistic.count > 0) {
+        	        // Create a percentage for each candidate
+                	statistic.percentage = statistic.count/total;
+                    statistic.percentage = (statistic.percentage*100).toFixed(1);
+        		}
+
+                if (!leading || statistic.count > leading.count) {
+                    leading = statistic;
+                }
+
                 // Push the statistic to the calculation
                 calculations.candidates.push(statistic);
             });
 
             // Add the total iterations to the result
+            calculations.projectedWinner = leading;
+
+            // Add the total iterations to the result
             calculations.total = total;
 
-             // Return a final count
-                    cb(err, calculations);
+            // Send statistical data to IO instantly 
+            io.sockets.emit('statistics', calculations);
+
+            // Return a final count
+            if (cb) cb(err, calculations);
         });
 
     });

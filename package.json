@@ -23,6 +23,7 @@
     "pug": "^2.0.0-beta9",
     "request": "^2.79.0",
     "selenium-webdriver": "^3.0.1",
+    "socket.io": "^1.7.2",
     "webdriver-manager": "^11.1.1"
   }
 }
