@@ -57,7 +57,9 @@ Endpoints:
 - The second part is your database IP address and port: `@<address>:<port>`
 - Finally, add the title of the collecton to the MongoDB URL: `/<collection name>`
 
-`increment.setup('mongodb://increment:<password>@localhost/increment');`
+```
+increment.setup('mongodb://increment:<password>@localhost/increment');
+```
 
 
 ### Modifying Candidates
@@ -134,11 +136,17 @@ increment.statistics('american', function (err, statistics) {
 ### Security
 Expremental security features are available.
 - Enable or disable **cookies** to prevent double voting:
-    `var enableCookieProtection = false;`
-    `increment.setup({ cookies: true, ... });`
+```
+    var enableCookieProtection = false;
+    // or
+    increments.setup({ cookies: true, ... });
+```
 - Enable or disable **browser instances** to prevent double voting:
-    `var enableInstanceKeyProtection = true;`
-    `increment.setup({ instance: true, ... });`
+```
+    var enableInstanceKeyProtection = true;
+    // or 
+    increments.setup({ instance: true, ... });
+```
 
 ## Testing
 The _Increment_ package includes application to automatically test the voting procedure. Increment uses **Selenium Webdriver** to preform rapid-fire testing by __replicating how__ a user would cast a vote. 
