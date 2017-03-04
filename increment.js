@@ -14,8 +14,8 @@ var enableCookieProtection = false;
 var enableInstanceKeyProtection = true;
 
 // Security settings
-var webPort = 8080;
-var ioPort = 3080;
+var webPort = 8000;
+var ioPort = 3000;
 var randomBytesLength = 48;
 var randomBufferString = 'hex';
 

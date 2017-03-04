@@ -96,7 +96,6 @@ head
 			position: absolute;
 			bottom: 0;
 			width: 100%;
-			height: 100px;
 			background: #b6b6b6;
 		}
 		ul.statistics li {
@@ -138,7 +137,11 @@ head
 
 				for (i = 0; i < data.candidates.length; i++) {
 					var candidate = data.candidates[i];
-					$('#'+candidate.id).css('width', candidate.percentage+'%').data('count', candidate.count);
+					console.log($('#'+candidate.id).length);
+					if ($('#'+candidate.id).length == 0) {
+						$('.statistics').append('<li class="'+candidate.color+'" id="'+candidate.id+'" data-count="'+candidate.count+'"><div class="name">'+candidate.name+'</div><div class="count">'+candidate.count+'</div></li>');
+					}
+					$('#'+candidate.id).css('width', candidate.percentage+'%').data('count', candidate.count).css("width", candidate.percentage+"%");
 					$('#'+candidate.id+' .count').html(candidate.count);
 				}
 			});
@@ -168,10 +171,8 @@ body
 			else
 				div A validation error has occured. Your vote was not saved.
 	if vote
-		h1 You have voted for:
-		h2 #{vote}
-		h3 
-			a( href="/statistics" ) View Statistics
+		h1 You have voted for #{vote}
+	
 	if !vote & !statistics
 		h1 Cast your Vote
 		if candidates

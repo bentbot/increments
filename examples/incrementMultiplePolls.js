@@ -1,6 +1,6 @@
-// Add the plugin and connect to the MongoDB server...
+const increment = require('../lib/increments');
 const async = require('../node_modules/async');
-const increment = require('../lib/increment');
+
 
 // Change the database username, password, ip, port, and collection
 increment.setup('mongodb://increment:inc@localhost:27017/increment', function (err) {

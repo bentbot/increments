@@ -1,4 +1,4 @@
-const increment = require('./lib/votes.js');
+const increment = require('./lib/increment');
 
 /***
  * Setup
@@ -37,7 +37,7 @@ var vote = {
 increment.vote(vote, function(err, results) {
     if (err) throw (err);
     if (results.data == 'true') console.log('Voted ' + results.name);
-
+    
     /***
      * Generating Statistics
     ***/

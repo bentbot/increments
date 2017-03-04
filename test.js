@@ -2,7 +2,7 @@
 var selectedCandidate = false;
 var numerations = 1;
 var randomCandidate = false;
-var url= 'http://192.168.0.101:8000';
+var url= 'http://localhost:8000';
 // Get Console Args
 var chalk = require('chalk');
 
@@ -17,7 +17,7 @@ for( i = 0; i <= process.argv.length-1; i++) {
 		case '-n':
 			numerations = process.argv[i+1];
 		break;
-		case '--random-candidate':
+		case '--random':
 		case '-rand':
 		case '-r':
 			randomCandidate = true;

@@ -1,4 +1,4 @@
-const increment = require('../lib/increment');
+const increment = require('../lib/increments');
 increment.setup({ db: 'mongodb://increment:inc@localhost/increment' });
 increment.poll('fruits', ['Apples','Bananas','Oranges','Pears']);
 increment.vote('fruits', 'Oranges');

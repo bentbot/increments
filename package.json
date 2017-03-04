@@ -1,13 +1,13 @@
 {
-  "name": "increment",
-  "version": "1.0.0",
-  "description": "Voting machine",
-  "main": "index.js",
+  "name": "increments",
+  "version": "1.0.3",
+  "description": "Polls and Voting with MongoDB.",
+  "main": "lib/increment.js",
   "scripts": {
-    "test": "./node_modules/.bin/jasmine-node spec",
-    "start": "node index.js"
+    "test": "node test.js",
+    "start": "node increment.js"
   },
-  "author": "",
+  "author": "bentbot",
   "license": "ISC",
   "dependencies": {
     "async": "^2.1.4",

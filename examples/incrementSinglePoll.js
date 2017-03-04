@@ -1,4 +1,4 @@
-const increment = require('../lib/increment');
+const increment = require('../lib/increments');
 
 increment.setup({ db: 'mongodb://increment:inc@localhost:27017/increment' }, function (err) {
     if (err) throw (err);
