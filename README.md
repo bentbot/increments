@@ -9,11 +9,11 @@ $ npm install increments
 Add Increment to your code and add a database. Increment can create a poll, vote, and generate statistics.
 
 ```
-    const increment = require('increments');
-    increment.setup({ db: 'mongodb://increment:inc@localhost/increment' });
-    increment.poll('fruits', ['Apples','Bananas','Oranges','Pears']);
-    increment.vote('fruits', 'Oranges');
-    increment.statistics('fruits', function(e, f) { console.log( f.projectedWinner ); });
+    const increments = require('increments');
+    increments.setup({ db: 'mongodb://increment:inc@localhost/increment' });
+    increments.poll('fruits', ['Apples','Bananas','Oranges','Pears']);
+    increments.vote('fruits', 'Oranges');
+    increments.statistics('fruits', function(e, f) { console.log( f.projectedWinner ); });
 ```
 
 ### Features
