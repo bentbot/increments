@@ -20,7 +20,7 @@ var numerations = 1;
 for (var i = numerations - 1; i >= 0; i--) {
 
 	// Load the front-end
-	driver.get('http://localhost:8000');
+	driver.get('http://192.168.0.101:8000');
 
 	// Select a candidate 
 	var candidates = driver.findElement(By.css('.candidates li:nth-child('+candidate+')')).click()
@@ -29,7 +29,7 @@ for (var i = numerations - 1; i >= 0; i--) {
 	driver.findElement(By.id('submit')).click();
 
 	// Load the statistics
-	driver.get('http://localhost:8000/statistics');
+	driver.get('http://192.168.0.101:8000/statistics');
 
 };
 

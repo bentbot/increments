@@ -96,6 +96,7 @@ head
 			position: absolute;
 			bottom: 0;
 			width: 100%;
+			height: 100px;
 			background: #b6b6b6;
 		}
 		ul.statistics li {
@@ -167,8 +168,10 @@ body
 			else
 				div A validation error has occured. Your vote was not saved.
 	if vote
-		h1 You have voted for #{vote}
-	
+		h1 You have voted for:
+		h2 #{vote}
+		h3 
+			a( href="/statistics" ) View Statistics
 	if !vote & !statistics
 		h1 Cast your Vote
 		if candidates
