@@ -1,6 +1,6 @@
 {
   "name": "increments",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Polls and Voting made easy with MongoDB",
   "main": "lib/increment.js",
   "scripts": {
