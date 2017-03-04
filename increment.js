@@ -137,10 +137,10 @@ app.post('/vote', function(request, responce) {
                         
                     // Add the unique cookie to the user's browser...
                     if (enableCookieProtection) responce.cookie('key', uniqueKey, { maxAge: 605000000 });
-                    responce.send('ok');
+                    //responce.send('ok');
 
                     // Send a receipt of the vote
-                    //responce.render('index', { vote: request.body.vote });
+                    responce.render('index', { vote: request.body.vote });
 
                 });
             });
