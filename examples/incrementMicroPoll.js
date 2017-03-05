@@ -1,5 +1,6 @@
-const increment = require('../lib/increments');
-increment.setup({ db: 'mongodb://increment:inc@localhost/increment' });
-increment.poll('fruits', ['Apples','Bananas','Oranges','Pears']);
-increment.vote('fruits', 'Oranges');
-increment.statistics('fruits', function(e, f) { console.log( f.projectedWinner ); });
+const increments = require('../lib/increments');
+increments.setup({ db: 'mongodb://increment:inc@localhost/increment' });
+increments.poll('fruits', ['Apples','Bananas','Oranges','Pears']);
+increments.vote('fruits', 'Apples');
+increments.vote('fruits', 'Oranges');
+increments.statistics('fruits', function(e, data) { console.log( data ); });

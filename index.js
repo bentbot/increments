@@ -1,11 +1,14 @@
-const increment = require('./lib/increment');
+const increment = require('./lib/increments');
 
 /***
  * Setup
 ***/
 
 // Connect to a MongoDB database. Collections will be created to contain poll data.
-increment.setup({ db: 'mongodb://increment:inc@localhost:27017/increment' });
+var db = 'mongodb://increment:inc@localhost:27017/increment';
+increment.setup(db, function (err, data) {
+    if (err) throw (err);
+});
 
 
 // Define candidates or poll options
@@ -45,7 +48,7 @@ increment.vote(vote, function(err, results) {
     // Increment will show statistics when given the name of a poll
     increment.statistics('CanadianElection', function(err, data) {
         if (err) throw (err);
-        //console.log(data);
+        console.log(data);
         console.log('Projected Winner: ' + data.projectedWinner.name);
     });
 

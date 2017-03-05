@@ -1,77 +1,41 @@
 /* Define Canidates */
-var candidates = [
+const candidates = [
     { name: 'Hillary Clinton', color: 'blue' },
     { name: 'Donald Trump', color: 'red' }
-]
+];
 
-/* Protection */
+/* The name of the poll */
+var poll = 'elections';
 
-// Cookies allow a web browser to cast only one ballot.
-// Keep in mind that cookies can be spoofed or cleared which can lead to false votes.
-var enableCookieProtection = false;
 
-// Add a hidden key to each browser instance ignore double-posts
-var enableInstanceKeyProtection = true;
+/* Include and setup Increments */
+const increments = require('./lib/increments');
 
-// Security settings
+/* Increments secure settings */
+increments.setup({ 
+    db: 'mongodb://increment:inc@localhost:27017/increment',
+    cookies: true, // Enable unique voting cookies
+    instance: true, // Require instance keys to vote 
+}, function (err) {
+    if (err) throw (err);
+    console.log('Connecting to Database: mongodb://increment:inc@localhost:27017/increment');
+});
+
+// Add a poll with the above constants 
+increments.poll(poll, candidates);
+
+
+/* Start webserver */ 
+
 var webPort = 8000;
 var ioPort = 3000;
-var randomBytesLength = 48;
-var randomBufferString = 'hex';
 
-// Vote Logging
-var logToFile = true;
-
-
-/* Start the database connection */
-var db = require('mongoose');
-db.connect('mongodb://increment:inc@127.0.0.1:27017/increment');
-
-
-// Model a single voter with this database scheme
-var VoterSchema = new db.Schema({
-    vote: { type: String, required: true },
-    ipaddr: { type: String, required: true },
-    unique: { type: String, required: true },
-    time: { type: Date, default: Date.now }
-});
-
-
-// Create a trigger to save the vote to a log file
-var fs = require('fs');
-VoterSchema.pre('save', function (next) {
-    var vote = this;
-
-    if (logToFile == true) {
-        // Save votes to a backup file before adding them to the database
-        fs.readFile('logs/votes.json', function (err, buffer) {
-            if (err) throw (err);
-            if (buffer) buffer = buffer+vote+',\n';
-            fs.writeFile('logs/votes.json', buffer, function (err) {
-                next();
-            });
-        });
-    } else {
-        next();
-    }
-
-});
-
-VoterSchema.post('save', function (next) {
-    countVotes();
-});
-
-// Save the voter scheme
-var Voter = db.model('voters', VoterSchema);
-    
-/* Start Client Webserver */ 
 var express = require('express');
 var app = express(); 
 var async = require('async');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var pug = require('pug');
-var instances = [];
 
 // Receive votes by accepting a posted message with bodyParser
 app.use(bodyParser.json());
@@ -82,103 +46,69 @@ app.use(cookieParser());
 
 // Add template support
 app.set('view engine', 'pug');
-
-// Serve static template files
 app.use(express.static('views'))
+
+
 
 // Display the voting screen
 app.get('/', function(request, responce) {
-    getInstance(function (instance) {        
-        // Send the template
+    
+    /* Increments can return an instance code with increments.getInstance
+    /* Just return the instance code within the POST data of a vote.
+    /* The easiest way is to use a hidden field with the name='instance' */
+    
+    increments.getInstance(function (instance) {        
+        // Send the template with the defined candidates & the returned instance key 
         responce.render('index', {candidates: candidates, instance: instance });
     });
-
+    
 });
 
 
+
+// GET redirect to root
 app.get('/vote', function(request, responce) {
 	responce.redirect('/');
 });
 
-// The endpoint to receive a vote
+
+// The POST endpoint to receive a vote
 app.post('/vote', function(request, responce) { 
-
-    // Reject empty submissions
-    if (!request.body.vote) responce.redirect('/');
     
-    // Check if the client has already voted
-    if (request.body.vote) checkKey(request, function(fraudulent, vote) {
-
-
-        if (fraudulent == true) {
-            getInstance(function (instance) {
-                // Send the template
-                responce.render('index', {candidates: candidates, instance: instance, error: true, votes: vote });
-            });
-        }
-
-        if (fraudulent == false) {
-
-            // Generate a unique identifier
-            require('crypto').randomBytes(randomBytesLength, function(err, buffer) {
-                var uniqueKey = buffer.toString(randomBufferString);
-
-                // Create a virtual ballot
-                var ballot = new Voter({
-                    ipaddr: request.ip,
-                    unique: uniqueKey,
-                    vote: request.body.vote
-                });
-
-
-                // Save the unique ballot to the database
-                ballot.save( function (error) {
-                    if (error) responce.send('error');
-                        
-                    // Add the unique cookie to the user's browser...
-                    if (enableCookieProtection) responce.cookie('key', uniqueKey, { maxAge: 605000000 });
-                    //responce.send('ok');
-
-                    // Send a receipt of the vote
-                    responce.render('index', { vote: request.body.vote });
-
-                });
-            });
-
-        } // End fraudulent check
+    var ballot = {
+        instance: request.body.instance,
+        name: request.body.name
+    }
+    
+    /* Increments accepts a request object directly from Express. */    
+    increments.vote(ballot, function(err, data) {
+        if (err) throw (err);
+        responce.send(data);
     });
-
-
+    
 });
 
+// Display the statistics page
 app.get('/statistics', function( request, responce ) {
-    countVotes(function (err, statistics) {
-        if (err) throw (err)        
-
-        var results = {
-            candidates: candidates,
-            statistics: statistics
-        }
-
-        // Send a receipt of the vote
-        responce.render('index', results );
-
+    
+    /* Increments will return statistics with increments.statistics
+    /* Data is returned in JSON and rendered to the template.*/
+    
+    increments.statistics(poll, function (err, results) {
+        responce.render('index', { statistics: results } );
     });
+    
 });
 
+// API GET Request
 app.get('/statistics/data', function( request, responce ) {
-    countVotes(function (err, statistics) {
-        if (err) throw (err)        
-
-        var results = {
-            candidates: candidates,
-            statistics: statistics
-        }
-
-        // Send a receipt of the vote
+    
+    /* Increments can return RESTfully to an API */
+    increments.statistics(poll, function (err, results) {
+        if (err) throw (err);
         responce.send(results);
-
     });
+    
 });
 
 
@@ -188,111 +118,5 @@ app.listen(webPort);
 console.log(chalk.green.bold('Server started listening on port: '+webPort))
 
 var io = require('socket.io')(ioPort);
-/* Count votes */
-function countVotes(cb) {
-    
-    // Create an empty statistics array
-    var statistics = [];
-    
-    // For each candidate
-    async.each( candidates, function ( candidate, callback ) {
-        // Find the candidate's name
-        var name = candidate.name;
-        // Find all votes for a candidate in the database
-        Voter.count({ vote: name }, function (err, increments) {
-            if (err) call(err);
-            var percentage = 0;
-            var candidateID = name.replace(' ', '_').toLowerCase();
-
-            // Write the total vote count to the statistics array
-            statistics.push({
-                count: increments,
-                name: name,
-                id: candidateID,
-                color:  candidate.color,
-                percentage: 0
-            });
-
-            // Trigger the next function
-            callback(err)
-        });
-    }, function (err) {
-        // Check for errors
-        if (err) throw (err);
-        // A new calculation
-        var leading, calculations = { candidates: [], total: 0 };
-
-        // Count total votes
-        Voter.count({}, function (err, total) {
-
-            // Run calculations for each candidate
-            async.each( statistics, function ( statistic ) {
-        		if (statistic.count > 0) {
-        	        // Create a percentage for each candidate
-                	statistic.percentage = statistic.count/total;
-                    statistic.percentage = (statistic.percentage*100).toFixed(1);
-        		}
-
-                if (!leading || statistic.count > leading.count) {
-                    leading = statistic;
-                }
-
-                // Push the statistic to the calculation
-                calculations.candidates.push(statistic);
-            });
-
-            // Add the total iterations to the result
-            calculations.projectedWinner = leading;
-
-            // Add the total iterations to the result
-            calculations.total = total;
-
-            // Send statistical data to IO instantly 
-            io.sockets.emit('statistics', calculations);
-
-            // Return a final count
-            if (cb) cb(err, calculations);
-        });
-
-    });
-}
-
-/* Check if the user has already voted */
-function checkKey(request, callback) {
-    
-    if ( request.body.instance ) {
-        var instance = request.body.instance;
-
-        if ( instances.indexOf(instance) > -1 ) {
-            var index = instances.indexOf(instance);
-            instances = instances.splice(index, 1);
-            if ( request.cookies.key ) {
-                // Try to find a vote with the cookie key if it exists
-                Voter.findOne({ unique: request.cookies.key }, function (err, voter) {
-                    if (err) throw (err);
-
-                    // Send true if a previous vote was found
-                    if ( voter ) {
-                        callback(enableCookieProtection, voter);
-                    } else {
-                        callback(false, false);
-                    }
-                });
-            } else {
-                // Could not find a valid cookie
-                callback(false, false);
-            }
-        } else {
-            callback(enableInstanceKeyProtection, false);
-        }
-    }
-}
-
-
-function getInstance(cb) {
-    require('crypto').randomBytes(randomBytesLength, function(err, buffer) {
-        var instance = buffer.toString(randomBufferString);
-        instances.push(instance);
-        cb(instance);
-    });
-}
+// Send statistical data to IO instantly 
+//io.sockets.emit('statistics', calculations);
