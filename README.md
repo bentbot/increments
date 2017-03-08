@@ -1,12 +1,12 @@
 # Increment
-Increment is a simple **database-driven web app** for placing **votes** for various political parties and candidiates. 
+Increment is a **database-driven** for creating  **polls** and taking **votes** for various options, candidates, or parties. Using MongoJS collections as a storage framework, Increments offers in-depth statistical data on generated polls.
 
 ## Usage
-First, install **increments** with NPM.
+Install the **increments** module with NPM...
 ```sh
 $ npm install increments
 ```
-Add Increment to your code and add a database. Increment can create a poll, vote, and generate statistics.
+Add Increments to your code and specify a database. Increments can create polls with options, vote on polls, require unique keys & cookies, generate statistics, and calculate a winner.
 
 ```
     const increments = require('increments');
@@ -149,7 +149,7 @@ Expremental security features are available.
 ```
 
 ## Testing
-The _Increment_ package includes application to automatically test the voting procedure. Increment uses **Selenium Webdriver** to preform rapid-fire testing by __replicating how__ a user would cast a vote. 
+The _Increment_ package includes application to automatically test the voting procedure. Increment uses **Selenium Webdriver** to preform rapid-fire testing by replicating how a user would cast a vote. 
 
 ### Setup WebDriver
 The **webdriver-service** should only take only a moment to install. It can be installed to your system  with **NPM** or downloaded directly: http://www.seleniumhq.org/projects/webdriver/

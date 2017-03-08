@@ -1,10 +1,11 @@
 {
   "name": "increments",
-  "version": "1.1.1",
-  "description": "Polls and Voting made easy with MongoDB",
+  "version": "1.1.2",
+  "description": "Create polls and manage votes with MongoDB",
   "main": "lib/increments.js",
   "scripts": {
-    "start": "node increment.js"
+    "start": "node increment.js",
+    "test": "node test.js"
   },
   "author": "bentbot",
   "license": "ISC",

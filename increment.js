@@ -14,8 +14,8 @@ const increments = require('./lib/increments');
 /* Increments secure settings */
 increments.setup({ 
     db: 'mongodb://increment:inc@localhost:27017/increment',
-    cookies: true, // Enable unique voting cookies
-    instance: true, // Require instance keys to vote 
+    cookies: false, // Enable unique voting cookies
+    instance: false, // Require instance keys to vote 
 }, function (err) {
     if (err) throw (err);
     console.log('Connecting to Database: mongodb://increment:inc@localhost:27017/increment');
@@ -75,15 +75,26 @@ app.get('/vote', function(request, responce) {
 // The POST endpoint to receive a vote
 app.post('/vote', function(request, responce) { 
     
+    /* Increments accepts an object with the following items:
+    /
+    /* 'name'       The candidate or option you are voting for
+    /* 'poll'       A poll identifier you have already defined
+    /* 'instance'   The variable generated with getInstance
+    /
+    /  Voting is accomplished first by creating an object 'ballot' with a name and a poll
+    /  Pass the instance value if necessary, then execute increments.vote(ballot)
+    */
+    
     var ballot = {
-        instance: request.body.instance,
-        name: request.body.name
+        name: request.body.vote,             // name of candidate (input name="vote")
+        poll: poll,                          // the name of the poll ('elections')
+        instance: request.body.instance      // hidden input (name="instance")
     }
     
-    /* Increments accepts a request object directly from Express. */    
+    /* Increments accepts the object and sends a responce to Express. */
     increments.vote(ballot, function(err, data) {
         if (err) throw (err);
-        responce.send(data);
+        responce.redirect('/statistics');
     });
     
 });
