@@ -12,11 +12,7 @@ var poll = 'elections';
 const increments = require('./lib/increments');
 
 /* Increments secure settings */
-increments.setup({ 
-    db: 'mongodb://increment:inc@localhost:27017/increment',
-    cookies: false, // Enable unique voting cookies
-    instance: false, // Require instance keys to vote 
-}, function (err) {
+increments.setup('mongodb://increment:inc@localhost:27017/increment', function (err) {
     if (err) throw (err);
     console.log('Connecting to Database: mongodb://increment:inc@localhost:27017/increment');
 });
@@ -95,7 +91,14 @@ app.post('/vote', function(request, responce) {
     increments.vote(ballot, function(err, data) {
         if (err) throw (err);
         responce.redirect('/statistics');
+    
+        increments.statistics(poll, function (err, results) {
+            io.sockets.emit('statistics', results);
+        })
+
     });
+
+
     
 });
 
@@ -130,4 +133,3 @@ console.log(chalk.green.bold('Server started listening on port: '+webPort))
 
 var io = require('socket.io')(ioPort);
 // Send statistical data to IO instantly 
-//io.sockets.emit('statistics', calculations);
