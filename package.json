@@ -1,20 +1,22 @@
 {
   "name": "increments",
-  "version": "1.1.4",
+  "version": "1.1.7",
   "description": "Create polls and manage votes with MongoDB",
   "main": "lib/increments.js",
   "scripts": {
-    "start": "node increment.js",
+    "start": "node index.js",
     "test": "node test.js"
   },
   "author": "bentbot",
   "license": "ISC",
   "dependencies": {
-    "mongoose": "^4.7.8",
     "async": "^2.1.4",
     "body-parser": "^1.16.0",
     "cookie-parser": "^1.4.3",
-    "crypto": "0.0.3"
+    "crypto": "0.0.3",
+    "mongoose": "^4.7.8",
+    "mysql": "^2.13.0",
+    "ng-socket-io": "^0.1.10"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -30,5 +32,4 @@
     "socket.io": "^1.7.2",
     "webdriver-manager": "^11.1.1"
   }
-    
 }

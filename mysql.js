@@ -1,3 +1,8 @@
+var increments = require('./lib/increments');
+
+increments.setup({ db: mysql://root:root@192.168.0.100 })
+
+
 /* Define Canidates */
 const candidates = [
     { name: 'Donald Trump', color: 'red' },
