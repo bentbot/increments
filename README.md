@@ -134,7 +134,18 @@ increment.statistics('american', function (err, statistics) {
 ```
 
 ### Security
-Expremental security features are available.
+Expremental security features are available. It is suggusted to log a user's **IP addresses** in the  __data__ mutiable when submitting a vote.
+
+- Also Consider
+    - Comparing ISP information by resolving the IP Address of each vote.
+    - Uniqueness of geolocation provided by a third-party or the client itself.
+    - Client specific info ( Gecko Versions, System OS, time, window size / position )
+    - The time between each vote submitted. Votes in fast succession may suggest fraud.
+    - Reverse-hashing each vote data to help detect database modifications.
+    - Creating HTTPS layers for **POST** and **Socket.IO** routes with a [webserver proxy](http://nginx.com/blog/nginx-nodejs-websockets-socketio/). 
+        -  Forwarding Ports: _8080_, _3000_ ( ex. _443, 3030_ )
+    
+
 - Enable or disable **cookies** to prevent double voting:
 ```
     var enableCookieProtection = false;
@@ -163,9 +174,9 @@ The **webdriver-service** should only take only a moment to install. It can be i
 `$ webdriver-manager start`
 
 In the terminal, if run the test.js file with the help argument you will see a list of options.
-- -c  --candidate  1 		Select the candidate number by number
-- -n  --numerations 100 		Set the number of votes
-- -r  --random 			Choose a random candidate for each vote
+- -c  --candidate  1    Select the candidate number by number
+- -n  --numerations 100     Set the number of votes
+- -r  --random      Choose a random candidate for each vote
 
 `$ node test.js --help`
 
