@@ -1,0 +1,19 @@
+<h2>Place your vote:</h2>
+
+<ul class="candidates">
+	<li class="candidate red" tabindex="1" (click)="ballot.candidate = 'Yes'" >Yes</li>
+	<li class="candidate blue" tabindex="2" (click)="ballot.candidate = 'No'" >No</li>
+</ul>
+
+<form action="/vote" method="post">
+	<input class="vote" [(ngModel)]="ballot.candidate" id="vote" name="vote"/>
+	<input type="hidden" [(ngModel)]="ballot.instance" name="instance" /><br/>
+	<input class="button" (click)="vote()" type="submit" id="submit" value="Vote"/>
+</form>
+
+<ul class="statistics" *ngIf="statistics">
+	<li *ngFor="let candidate of statistics.candidates" [attr.class]="(candidate.id == 'yes') ? 'red' : 'blue'" [attr.id]="candidate.id" [style.width.%]="candidate.percentage" [attr.data-count]="candidate.count">
+		<div class="name">{{ candidate.name }}</div>
+		<div class="count">{{ candidate.count }}</div>
+	</li>
+</ul>

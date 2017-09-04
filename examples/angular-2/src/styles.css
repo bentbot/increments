@@ -1,0 +1,120 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+	background: #f3f3f3;
+	margin: 15px 0 0 0;
+	padding: 0;
+	text-align: center;
+}
+a, h1, h2, h3, h4 {
+	text-align: center;
+	font-family: sans-serif;
+}
+.candidates {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	margin: 10px 0;
+}
+
+.candidate {
+	background: #afafaf;
+	display: inline-block;
+	width: 100px;
+	height: 60px;
+	color: white;
+	font-family: sans-serif;
+	font-size: 21px;
+	text-align: center;
+	padding: 40px 0 0 0;
+	margin: 0 20px 0 0;
+	cursor: pointer;
+	overflow: hidden;
+}
+.candidate:last-child {
+	margin: 0 !important;
+}
+.red { background: #F44336; color: white; outline-color: #249e2a; }
+.blue { background: #1565C0; color: white; }
+.orange { background: #ff9800; color: white; }
+.green { background: #4caf50; color: white; }
+.purple { background: rgb(94, 0 , 154); color: white; }
+.skyblue { background: #4fc3f7; color: white; }
+h1.red, h2.red, h3.red { 
+	color: #F44336; 
+	background: transparent;     
+	margin: 5px 0;
+}
+h1.blue, h2.blue, h3.blue { 
+	color: #1565C0; 
+	background: transparent;     
+	margin: 5px 0;
+}
+h1.orange, h2.orange, h3.orange { 
+	color: #ff9800; 
+	background: transparent;     
+	margin: 5px 0;
+}
+h1.green, h2.green, h3.green { 
+	color: #4caf50; 
+	background: transparent;     
+	margin: 5px 0;
+}
+h1.purple, h2.purple, h3.purple { 
+	color: rgb(94, 0 , 154); 
+	background: transparent;     
+	margin: 5px 0;
+}
+h1.skyblue, h2.skyblue, h3.skyblue { 
+	color: #4fc3f7; 
+	background: transparent;     
+	margin: 5px 0;
+}
+h2.projectedVotes {
+	margin: 0;
+}
+form {
+	text-align: center;
+}
+input {
+	text-align: center;
+	font-size: 21px;
+}
+.button {
+	font-size: 16px;
+	background: white;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+	margin-top: 10px;
+}
+ul.statistics {
+	padding: 0;
+	margin: 0;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background: #b6b6b6;
+}
+ul.statistics li {
+	display: inline-block;
+	font-family: sans-serif;
+	font-size: 20px;
+	text-align: center;
+	width: 49%;
+	padding: 20px 0;
+	overflow: hidden;
+	height: 60px;
+	transition: all 0.2s linear;
+}
+ul.statistics li div {
+	font-size: 20px;
+}
+.error {
+	background: #f9ff56;
+	width: 50%;
+	margin: 0 auto;
+	text-align: center;
+	padding: 15px;
+	border-radius: 0px;
+	font-family: sans-serif;
+}
