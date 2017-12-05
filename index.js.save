@@ -1,21 +1,20 @@
 /* Define Canidates */
 const candidates = [
-    { name: 'Liam PAYNE', color: 'green' },
-    { name: 'Brittney SPEARS', color: 'red' },
-    { name: 'Kanye West', color: 'purple' }
+    { name: 'Stephen Colbert', color: 'red' },
+    { name: 'Tyra Banks', color: 'blue' }
 ];
 
 /* The name of the poll */
-var poll = 'vma';
+var poll = 'elections';
 
 
 /* Include and setup Increments */
 const increments = require('./lib/increments');
 
-/* Increments accepts a MySQL and MongoDB database. */
-increments.setup('mysql://increments:increment@localhost:3306/polls', function (err) {
+/* Increments secure settings */
+increments.setup('mongodb://increments:inc@localhost:27017/increments', function (err) {
     if (err) throw (err);
-    console.log('Connecting to Database');
+    console.log('Connecting to Database: mongodb://increment:inc@localhost:27017/increment');
 });
 
 // Add a poll with the above constants 
@@ -34,24 +33,24 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var pug = require('pug');
 
-// Receive votes by accepting a posted message using bodyParser
+// Receive votes by accepting a posted message with bodyParser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Prevent double submissions by checking cookies with cookieParser
 app.use(cookieParser());
 
-// Add some template support
+// Add template support
 app.set('view engine', 'pug');
 app.use(express.static('views'))
 
 
 
-/* Generate the voting screen located at localhost:8000 */
+// Display the voting screen
 app.get('/', function(request, responce) {
     
-    /* Increments can create a unique browser key
-    /* Return the instance key within the POST data of a vote using the
+    /* Increments can return an instance code with increments.getInstance
+    /* Just return the instance code within the POST data of a vote.
     /* The easiest way is to use a hidden field with the name='instance' */
     
     increments.getInstance(function (instance) {        
@@ -94,7 +93,6 @@ app.post('/vote', function(request, responce) {
         responce.redirect('/statistics');
     
         increments.statistics(poll, function (err, results) {
-            if (err) throw (err);
             io.sockets.emit('statistics', results);
         })
 
@@ -111,7 +109,6 @@ app.get('/statistics', function( request, responce ) {
     /* Data is returned in JSON and rendered to the template.*/
     
     increments.statistics(poll, function (err, results) {
-        if (err) throw(err);
         responce.render('index', { statistics: results } );
     });
     
