@@ -11,6 +11,7 @@ Add Increments to your code and specify a database. Increments can create polls 
 ```
     const increments = require('increments');
     increments.setup({ db: 'mongodb://increment:inc@localhost/increment' });
+    increments.setup('mysql://increments:increment@localhost:3306/polls');
     increments.poll('fruits', ['Apples','Bananas','Oranges','Pears']);
     increments.vote('fruits', 'Oranges');
     increments.statistics('fruits', function(e, f) { console.log( f.projectedWinner ); });
@@ -18,7 +19,7 @@ Add Increments to your code and specify a database. Increments can create polls 
 
 ### Features
   - Poll & voting mechanics
-  - Database driven statistics ([MongoDB](https://www.mongodb.com/))
+  - Database driven statistics ([MongoDB](https://www.mongodb.com/)) or MySQL
   - Unique session keys and cookie protection 
 
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increment/master/screenshots/vote.png)
