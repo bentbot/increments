@@ -3,10 +3,12 @@ include head.pug
 if statistics
 	h1 Voting Statistics
 	h3.total-votes #{statistics.total} Votes
-	if statistics.projectedWinner
+	if statistics.projectedWinner && statistics.total > 0
 		h2.projectedVotes Projected Winner
 		h1.projectedWinner( class=statistics.projectedWinner.color ) #{statistics.projectedWinner.name}
-	a( href="/" ) Vote Again
+		a.voteLink( href="/" ) Vote Again
+	if statistics.total == 0
+		a.voteLink( href="/" ) Vote
 	ul.statistics
 		each statistic, number in statistics.candidates
 			if statistic.percentage > 0

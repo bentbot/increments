@@ -19,29 +19,29 @@ a, h1, h2, h3, h4 {
 .candidate {
 	background: #afafaf;
 	display: inline-block;
-	width: 90px;
+	width: 120px;
 	height: 50px;
 	color: white;
 	font-family: sans-serif;
 	font-size: 21px;
 	text-align: center;
-	padding: 35px 15px;
+	padding: 50px 15px;
 	margin: 20px;
 	cursor: pointer;
 	overflow: hidden;
+	vertical-align: middle;
 }
 
-.red { background: #F44336; color: white; }
-.blue { background: #1565C0; color: white; }
-.darkblue { background: #01297d; color: white; }
-.skyblue { background: #4fc3f7; color: white; }
-.orange { background: #ff9800; color: white; }
-.green { background: #4caf50; color: white; }
-.purple { background: rgb(94, 0 , 154); color: white; }
-.pink { background: #da569e; color: white; }
-
-.black { background: black; color: white; }
-.white { background: white; color: black; }
+.red { background: #F44336; outline-color: #F44336; color: white; }
+.blue { background: #1565C0; outline-color: #1565C0; color: white; }
+.darkblue { background: #01297d; outline-color: #01297d; color: white; }
+.skyblue { background: #4fc3f7; outline-color: #4fc3f7; color: white; }
+.orange { background: #ff9800; outline-color: #ff9800; color: white; }
+.green { background: #4caf50; outline-color: #4caf50; color: white; }
+.purple { background: rgb(94, 0 , 154);  outline-color: rgb(94, 0 , 154); color: white; }
+.pink { background: #da569e; outline-color: #da569e; color: white; }
+.black { background: black;  outline-color: black; color: white; }
+.white { background: white;  outline-color: white; color: black; }
 
 
 h1.red, h2.red, h3.red { 
@@ -51,6 +51,16 @@ h1.red, h2.red, h3.red {
 }
 h1.blue, h2.blue, h3.blue { 
 	color: #1565C0; 
+	background: transparent;     
+	margin: 5px 0;
+}
+h1.darkblue, h2.darkblue, h3.darkblue { 
+	color: #01297d; 
+	background: transparent;     
+	margin: 5px 0;
+}
+h1.skyblue, h2.skyblue, h3.skyblue { 
+	color: #4fc3f7; 
 	background: transparent;     
 	margin: 5px 0;
 }
@@ -66,12 +76,22 @@ h1.green, h2.green, h3.green {
 }
 h1.purple, h2.purple, h3.purple { 
 	color: rgb(94, 0 , 154); 
-	background: transparent;     
+	background: transparent;
 	margin: 5px 0;
 }
-h1.skyblue, h2.skyblue, h3.skyblue { 
-	color: #4fc3f7; 
-	background: transparent;     
+h1.pink, h2.pink, h3.pink { 
+	color: #da569e; 
+	background: transparent;
+	margin: 5px 0;
+}
+h1.black, h2.black, h3.black { 
+	color: black; 
+	background: transparent;
+	margin: 5px 0;
+}
+h1.white, h2.white, h3.white { 
+	color: white; 
+	background: transparent;
 	margin: 5px 0;
 }
 h2.projectedVotes {
@@ -114,6 +134,14 @@ ul.statistics li {
 ul.statistics li div {
 	font-size: 20px;
 }
+.voteLink {
+	font-size: 22px;
+	text-decoration: none;
+	color: #3F51B5;
+}
+.voteLink:hover {
+	text-decoration: underline;
+}
 .error {
 	background: #f9ff56;
 	width: 50%;
@@ -123,3 +151,4 @@ ul.statistics li div {
 	border-radius: 0px;
 	font-family: sans-serif;
 }
+.swish { transition: all 0.2s linear; }

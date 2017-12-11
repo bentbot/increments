@@ -55,20 +55,6 @@ Endpoints:
 
 ### Database
 
-#### MySQL
-1. Create a user with the name `increment` and add it to a database called `increments`
-
-2. Grant the following privileges to the user:
-  - alter
-  - alter routine
-  - create
-  - index
-  - insert
-  - references
-  - select
-  - trigger
-  - update
-
 #### MongoDB
 1. Create a user with the name `increment` which has `readWrite` access to a database.
 
@@ -81,6 +67,20 @@ Endpoints:
 increment.setup('mongodb://increment:<password>@localhost/increment');
 ```
 
+#### MySQL
+1. Create a user with the name `increment` and add it to a database called `polls`
+
+2. Grant the following privileges to the user:
+- alter
+- create
+- insert
+- select
+
+3. Setup Increments using your MySQL username and password in a JDBC URL.
+
+```
+increment.setup('mysql://increment:<password>@localhost:3306/polls');
+```
 
 ### Modifying Candidates
 The first few lines of `index.js` define the **candidates** and basic security settings. 
@@ -194,9 +194,11 @@ The **webdriver-service** should only take only a moment to install. It can be i
 `$ webdriver-manager start`
 
 In the terminal, if run the test.js file with the help argument you will see a list of options.
-- -c  --candidate  1    Select the candidate number by number
+- -c  --candidate  1        Select the candidate number by number
 - -n  --numerations 100     Set the number of votes
-- -r  --random      Choose a random candidate for each vote
+- -k  --thousands           Set the number of votes (multiplied my a thousand)
+- -m  --millions            Set the number of votes (multiplied my a million)
+- -r  --random              Choose a random candidate for each vote
 
 `$ node test.js --help`
 

@@ -17,6 +17,14 @@ for( i = 0; i <= process.argv.length-1; i++) {
 		case '-n':
 			numerations = process.argv[i+1];
 		break;
+		case '--thousands':
+		case '-k':
+			numerations = process.argv[i+1]*1000;
+		break;
+		case '--millions':
+		case '-m':
+			numerations = process.argv[i+1]*1000000;
+		break;
 		case '--random':
 		case '-rand':
 		case '-r':

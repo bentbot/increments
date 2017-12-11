@@ -1,6 +1,6 @@
 {
   "name": "increments",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "Liam Hogan <liam@hogan.re>",
   "description": "Create polls and manage votes with a MongoDB or MySQL database.",
   "main": "lib/increments.js",

@@ -1,15 +1,15 @@
+/* The name of the poll */
+var poll = 'canadian_election'; 
+
 /* Define Canidates */
 const candidates = [
-    { name: 'Liam PAYNE', color: 'green' },
-    { name: 'Brittney SPEARS', color: 'red' },
-    { name: 'Kanye West', color: 'purple' },
-    { name: 'Katy Perry', color: 'blue' },
-    { name: 'Avril Lavine', color: 'pink' }
+    { name: 'Tom Mulcair', color: 'orange' },    
+    { name: 'Justin Trudeau', color: 'red' },
+    { name: 'Andrew Scheer', color: 'blue' },
+    { name: 'Bloc Québécois', color: 'skyblue' },
+    { name: 'Independent Party', color: 'darkblue' },
+    { name: 'Green Party', color: 'green' }
 ];
-
-/* The name of the poll */
-var poll = 'vma'; 
-
 
 /* Include and setup Increments */
 const increments = require('./lib/increments');
