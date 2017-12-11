@@ -2,11 +2,13 @@
 const candidates = [
     { name: 'Liam PAYNE', color: 'green' },
     { name: 'Brittney SPEARS', color: 'red' },
-    { name: 'Kanye West', color: 'purple' }
+    { name: 'Kanye West', color: 'purple' },
+    { name: 'Katy Perry', color: 'blue' },
+    { name: 'Avril Lavine', color: 'pink' }
 ];
 
 /* The name of the poll */
-var poll = 'vma';
+var poll = 'vma'; 
 
 
 /* Include and setup Increments */
@@ -55,9 +57,15 @@ app.get('/', function(request, responce) {
     /* The easiest way is to use a hidden field with the name='instance' */
     
     increments.getInstance(function (instance) {        
-        // Send the template with the defined candidates & the returned instance key 
-        responce.render('index', {candidates: candidates, instance: instance });
-    });
+        
+        increments.statistics(poll, function (err, results) {
+        
+            // Send the template with the defined candidates & the returned instance key 
+            responce.render('index', {candidates: candidates, instance: instance, statistics: results });
+        
+        });
+
+    });    
     
 });
 
@@ -112,7 +120,7 @@ app.get('/statistics', function( request, responce ) {
     
     increments.statistics(poll, function (err, results) {
         if (err) throw(err);
-        responce.render('index', { statistics: results } );
+        responce.render('statistics', { statistics: results } );
     });
     
 });

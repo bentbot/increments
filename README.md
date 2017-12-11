@@ -44,6 +44,9 @@ Use NPM to install the required dependences. **Warning: Dependences may not be s
 $ git clone https://github.com/bentbot/increment
 $ cd ./increment 
 $ npm install
+$ npm install nodemon -g
+$ nodemon 
+$ .. or..
 $ node index.js
 ```
 Endpoints:
@@ -51,6 +54,22 @@ Endpoints:
 - **View voting results:** **[http://localhost:8000/statistics](http://localhost:8000/statistics)**
 
 ### Database
+
+#### MySQL
+1. Create a user with the name `increment` and add it to a database called `increments`
+
+2. Grant the following privileges to the user:
+  - alter
+  - alter routine
+  - create
+  - index
+  - insert
+  - references
+  - select
+  - trigger
+  - update
+
+#### MongoDB
 1. Create a user with the name `increment` which has `readWrite` access to a database.
 
 2. Modify the databse line in `./increment.js` to **reflect your local or remote MongoDB** server. 

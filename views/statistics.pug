@@ -1,0 +1,17 @@
+include head.pug
+
+if statistics
+	h1 Voting Statistics
+	h3.total-votes #{statistics.total} Votes
+	if statistics.projectedWinner
+		h2.projectedVotes Projected Winner
+		h1.projectedWinner( class=statistics.projectedWinner.color ) #{statistics.projectedWinner.name}
+	a( href="/" ) Vote Again
+	ul.statistics
+		each statistic, number in statistics.candidates
+			if statistic.percentage > 0
+				li(class=statistic.color id=statistic.id style="width:"+statistic.percentage+"%" data-count=statistic.count)
+					if statistic.percentage > 6
+						div.name #{statistic.name}
+					if statistic.percentage > 6
+						div.count #{statistic.count}

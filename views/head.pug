@@ -1,0 +1,15 @@
+html
+	head
+		title Increment
+		link(href="/style.css" rel="stylesheet" type="text/css")
+		script(src='/jquery.js')
+		script(src='//localhost:3000/socket.io/socket.io.js')
+		script(src='/main.js')
+	body
+		if error
+			.error
+				if votes
+					div You have already voted for #{votes.vote}. 
+					div #{votes.time}
+				else
+					div A validation error has occured. Your vote was not saved.

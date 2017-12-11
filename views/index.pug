@@ -1,201 +1,24 @@
+include head.pug
 
-html
-	head
-		title Increment
-		style.
-			body {
-				background: #f3f3f3;
-				margin: 15px 0 0 0;
-				padding: 0;
-				text-align: center;
-			}
-			a, h1, h2, h3, h4 {
-				text-align: center;
-				font-family: sans-serif;
-			}
-			.candidates {
-				list-style: none;
-				padding: 0;
-				margin: 0;
-				text-align: center;
-				margin: 10px 0;
-			}
+if !vote
+	h1 Cast your Vote
+	if candidates
+		ul.candidates
+			each candidate, number in candidates
+				li(tabindex=number+1 class="candidate " + candidate.color) #{candidate.name}
 
-			.candidate {
-				background: #afafaf;
-				display: inline-block;
-				width: 100px;
-				height: 75px;
-				color: white;
-				font-family: sans-serif;
-				font-size: 21px;
-				text-align: center;
-				padding: 25px 0 0 0;
-				margin: 0 20px 0 0;
-				cursor: pointer;
-				overflow: hidden;
-			}
-			.candidate:last-child {
-				margin: 0 !important;
-			}
-			.red { background: #F44336; color: white; }
-			.blue { background: #1565C0; color: white; }
-			.orange { background: #ff9800; color: white; }
-			.green { background: #4caf50; color: white; }
-			.purple { background: rgb(94, 0 , 154); color: white; }
-			.skyblue { background: #4fc3f7; color: white; }
-			h1.red, h2.red, h3.red { 
-				color: #F44336; 
-				background: transparent;     
-				margin: 5px 0;
-			}
-			h1.blue, h2.blue, h3.blue { 
-				color: #1565C0; 
-				background: transparent;     
-				margin: 5px 0;
-			}
-			h1.orange, h2.orange, h3.orange { 
-				color: #ff9800; 
-				background: transparent;     
-				margin: 5px 0;
-			}
-			h1.green, h2.green, h3.green { 
-				color: #4caf50; 
-				background: transparent;     
-				margin: 5px 0;
-			}
-			h1.purple, h2.purple, h3.purple { 
-				color: rgb(94, 0 , 154); 
-				background: transparent;     
-				margin: 5px 0;
-			}
-			h1.skyblue, h2.skyblue, h3.skyblue { 
-				color: #4fc3f7; 
-				background: transparent;     
-				margin: 5px 0;
-			}
-			h2.projectedVotes {
-				margin: 0;
-			}
-			form {
-				text-align: center;
-			}
-			input {
-				text-align: center;
-				font-size: 21px;
-			}
-			.button {
-				font-size: 16px;
-				background: white;
-				border: 1px solid #cccccc;
-				border-radius: 4px;
-				margin-top: 10px;
-			}
-			ul.statistics {
-				padding: 0;
-				margin: 0;
-				position: absolute;
-				bottom: 0;
-				width: 100%;
-				background: #b6b6b6;
-			}
-			ul.statistics li {
-				display: inline-block;
-				font-family: sans-serif;
-				font-size: 20px;
-				text-align: center;
-				width: 49%;
-				padding: 20px 0;
-				overflow: hidden;
-				height: 60px;
-				transition: all 0.2s linear;
-			}
-			ul.statistics li div {
-				font-size: 20px;
-			}
-			.error {
-				background: #f9ff56;
-				width: 50%;
-				margin: 0 auto;
-				text-align: center;
-				padding: 15px;
-				border-radius: 0px;
-				font-family: sans-serif;
-			}
-		script(src='/jquery.js')
-		script(src='//localhost:3000/socket.io/socket.io.js')
-		script.
-			var socket = io.connect('http://localhost:3000');
-			$( document ).ready(function() {
-				
-				socket.on('statistics', function (data) {
+	form(action="/vote" method="post")
+		input( id="vote" class="vote" name="vote" )
+		input( type="hidden" name="instance" value=instance )
+		br
+		input( class="button" type="submit" id="submit" value="Vote" )
 
-					if (data.total) $('.total-votes').html(data.total + ' Votes');
-
-					if (data.projectedWinner) {
-						$('.projectedWinner').html(data.projectedWinner.name).attr('class', 'projectedWinner '+data.projectedWinner.color);
-					}
-
-					for (i = 0; i < data.candidates.length; i++) {
-						var candidate = data.candidates[i];
-						console.log($('#'+candidate.id).length);
-						if ($('#'+candidate.id).length == 0) {
-							$('.statistics').append('<li class="'+candidate.color+'" id="'+candidate.id+'" data-count="'+candidate.count+'"><div class="name">'+candidate.name+'</div><div class="count">'+candidate.count+'</div></li>');
-						}
-						$('#'+candidate.id).css('width', candidate.percentage+'%').data('count', candidate.count).css("width", candidate.percentage+"%");
-						$('#'+candidate.id+' .count').html(candidate.count);
-					}
-				});
-
-				$('.candidate').on('mousedown keydown', function (e) {
-					console.log(e);	
-					if (e.type == "mousedown" || e.keyCode == 32 || e.keyCode == 13 ) {
-						 $('.vote').val( $(this).html() );
-					}
-				});
-				$('.button').on('keydown', function (e) {
-					console.log(e);
-					if (e.keyCode == 9) {
-						$(this).blur();
-						$('ul.candidates li:first-child').focus();
-					}
-				});
-
-			});
-	body
-		if error
-			.error
-				if votes
-					div You have already voted for #{votes.vote}. 
-					div #{votes.time}
-				else
-					div A validation error has occured. Your vote was not saved.
-		if vote
-			h1 You have voted for #{vote}
-			a( href="/" onclick="javascript:void window.open('/statistics','1488669285138','width=700,height=500,toolbar=0,menubar=0,location=0,status=0,scrollbars=0,resizable=1,left=0,top=0');" ) View Statistics
-		if !vote & !statistics
-			h1 Cast your Vote
-			if candidates
-				ul.candidates
-					each candidate, number in candidates
-						li(tabindex=number+1 class="candidate " + candidate.color) #{candidate.name}
-
-			form(action="/vote" method="post")
-				input( id="vote" class="vote" name="vote" )
-				input( type="hidden" name="instance" value=instance )
-				br
-				input( class="button" type="submit" id="submit" value="Vote" )
-		if statistics
-			h1 Voting Statistics
-			h3.total-votes #{statistics.total} Votes
-			if statistics.projectedWinner
-				h2.projectedVotes Projected Winner
-				h1.projectedWinner( class=statistics.projectedWinner.color ) #{statistics.projectedWinner.name}
-			ul.statistics
-				each statistic, number in statistics.candidates
-					if statistic.percentage > 0
-						li(class=statistic.color id=statistic.id style="width:"+statistic.percentage+"%" data-count=statistic.count)
-							if statistic.percentage > 6
-								div.name #{statistic.name}
-							if statistic.percentage > 6
-								div.count #{statistic.count}
+if statistics
+	ul.statistics
+		each statistic, number in statistics.candidates
+			if statistic.percentage > 0
+				li(class=statistic.color id=statistic.id style="width:"+statistic.percentage+"%" data-count=statistic.count)
+					if statistic.percentage > 6
+						div.name #{statistic.name}
+					if statistic.percentage > 6
+						div.count #{statistic.count}
