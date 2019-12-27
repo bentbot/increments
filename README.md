@@ -1,6 +1,9 @@
 # Increment
 Increment is a **database-driven** for creating  **polls** and taking **votes** for various options, candidates, or parties. Using MongoJS collections as a storage framework, Increments offers in-depth statistical data on generated polls.
 
+## Demo
+Sample Poll: <a href="https://vote.canadianelections.janglehost.com/" target="_blank">Canadian Federal Elections 2019 (https://vote.canadianelections.janglehost.com)</a>.
+
 ## Usage
 Install the **increments** module with NPM...
 ```sh
