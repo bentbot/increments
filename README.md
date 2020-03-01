@@ -11,7 +11,7 @@ $ npm install increments
 Add Increments to your code and specify a database. Increments can create polls with options, vote on polls, require unique keys & cookies, generate statistics, and calculate a winner.
 
 ```js
-    const increments = require('increments');
+    let increments = require('increments');
     increments.setup({ db: 'mongodb://increment:inc@localhost/increment' });
     increments.setup('mysql://increments:increment@localhost:3306/polls');
     increments.poll('fruits', ['Apples','Bananas','Oranges','Pears']);
@@ -82,10 +82,9 @@ The first few lines of `index.js` define the **candidates** and basic security s
 Candidates are encoded using the __JSON__ data standard. Make sure the structure remains intact and programmicly correct. Remember to omit the ending comma from the last candidate.
 
 ```js
-const candidates = [
+let candidates = [
     { name: 'Red Team', color: 'red' }, 
-    { name: 'Blue Team', color: 'blue' },
-
+    { name: 'Blue Team', color: 'blue' }
 ];
 
 increments.poll('election', candidates);
