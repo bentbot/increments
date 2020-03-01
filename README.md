@@ -204,7 +204,7 @@ Running 65 votes for candidate 1
 ```
 If the test runs correctly, you should see a web browser pop-up and repeatedly cast a vote for the selected candidate. The results will are tabulated on the statistics page: http://localhost:8000/statistics 
 
-## Screenshots
+## Example Screenshots
 #### Voting screen
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/vote.png)
 
