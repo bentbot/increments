@@ -1,17 +1,16 @@
-# Increment
-Increment is a **database-driven** for creating  **polls** and taking **votes** for various options, candidates, or parties. Using MongoJS collections as a storage framework, Increments offers in-depth statistical data on generated polls.
+# Increments
+Increments is a **database-driven** for creating  **polls** and taking **votes** for various options, candidates, or parties. Using MongoJS collections as a storage framework, Increments offers in-depth statistical data on generated polls.
 
-## Demo
-Sample Poll: <a href="https://vote.canadianelections.janglehost.com/" target="_blank">Canadian Federal Elections 2019 (https://vote.canadianelections.janglehost.com)</a>.
+![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/canadian_poll.png)
 
 ## Usage
 Install the **increments** module with NPM...
-```sh
+```js
 $ npm install increments
 ```
 Add Increments to your code and specify a database. Increments can create polls with options, vote on polls, require unique keys & cookies, generate statistics, and calculate a winner.
 
-```
+```js
     const increments = require('increments');
     increments.setup({ db: 'mongodb://increment:inc@localhost/increment' });
     increments.setup('mysql://increments:increment@localhost:3306/polls');
@@ -22,11 +21,8 @@ Add Increments to your code and specify a database. Increments can create polls 
 
 ### Features
   - Poll & voting mechanics
-  - Database driven statistics ([MongoDB](https://www.mongodb.com/)) or MySQL
-  - Unique session keys and cookie protection 
-
-![N|Solid](https://raw.githubusercontent.com/bentbot/increment/master/screenshots/vote.png)
-
+  - Database driven statistics with ([MySQL](https://www.mysql.com/)) / ([MongoDB](https://www.mongodb.com/))
+  - Unique browser session keys and cookie protection 
 
 ### You can also:
   - Create and interact with different polls
@@ -36,25 +32,22 @@ Add Increments to your code and specify a database. Increments can create polls 
   - Turn cookies and session keys on or off
   - Submit or discard spoiled ballots
 
-![N|Solid](https://raw.githubusercontent.com/bentbot/increment/master/screenshots/vote_canadian.png)
-
 ## Installation
 
-Node.JS is required. Please install [Node.js](https://nodejs.org/) v4+ to run _Increment_ on your system.
-Next, download or clone [the latest release](https://github.com/bentbot/increment) from GitHub. 
+Node.JS is required. Please install [Node.js](https://nodejs.org/) v4+ to run _Increments_ on your system.
+Next, download or clone [the latest release](https://github.com/bentbot/increments) from GitHub. 
 Use NPM to install the required dependences. **Warning: Dependences may not be secure and safe to use in a production environment.**
-```sh
-$ git clone https://github.com/bentbot/increment
+
+```js
+npm install increments --save
+```
+or install it from GitHub repository
+```js
+$ git clone https://github.com/bentbot/increments
 $ cd ./increment 
 $ npm install
-$ npm install nodemon -g
-$ nodemon 
-$ .. or..
 $ node index.js
 ```
-Endpoints:
-- **Cast a vote:**  **[http://localhost:8000/](http://localhost:8000/)**
-- **View voting results:** **[http://localhost:8000/statistics](http://localhost:8000/statistics)**
 
 ### Database
 
@@ -66,23 +59,21 @@ Endpoints:
 - The second part is your database IP address and port: `@<address>:<port>`
 - Finally, add the title of the collecton to the MongoDB URL: `/<collection name>`
 
+```js
+let increments = require('increments');
+increments.setup('mongodb://increments:<password>@localhost/polls');
 ```
-increment.setup('mongodb://increment:<password>@localhost/increment');
-```
-
+or
 #### MySQL
 1. Create a user with the name `increment` and add it to a database called `polls`
 
-2. Grant the following privileges to the user:
-- alter
-- create
-- insert
-- select
+2. Grant the following privileges to the user: Alter, Create, Insert, Select
 
 3. Setup Increments using your MySQL username and password in a JDBC URL.
 
-```
-increment.setup('mysql://increment:<password>@localhost:3306/polls');
+```js
+let increments = require('increments');
+increments.setup('mysql://increments:<password>@localhost:3306/polls');
 ```
 
 ### Modifying Candidates
@@ -90,35 +81,35 @@ The first few lines of `index.js` define the **candidates** and basic security s
 
 Candidates are encoded using the __JSON__ data standard. Make sure the structure remains intact and programmicly correct. Remember to omit the ending comma from the last candidate.
 
-```sh
-
+```js
 const candidates = [
-    { name: 'Donald Trump', color: 'red' }, 
-    { name: 'Hillary Clinton', color: 'blue' }
+    { name: 'Red Team', color: 'red' }, 
+    { name: 'Blue Team', color: 'blue' },
+
 ];
 
-increment.poll('american', candidates);
-
+increments.poll('election', candidates);
 ```
 
 ### Voting
 A vote can be formed in multiple ways. The most simple is to reference a poll and provide a name.
-```
-increment.vote('american', 'Donald Trump'); // Callback function optional
+```js
+increments.vote('election', 'Red Team');
 ```
 A vote may be passed as an object with the poll and name defined within it. 
-```
-var ballot = { poll: 'american', name: 'Donald Trump', data: '123' };
+```js
+var ballot = { poll: 'election', name: 'Red Team', data: '123' };
 
-increment.vote(ballot, function(err, results) {
-  console.log(results);
+increments.vote(ballot, function(err, res) {
+  if (err) throw(err);
+  console.log(res);
 });
 
 /* Output:
 { __v: 0,
-  unique: '90699e28c94a02e1d67de02542132d036fa9f8f7dd655cd43668fdc8e1f28aff107b751d5292624ddc0bba8f3fc7278d',
-  name: 'Donald Trump',
-  poll: 'american',
+  unique: '90699e2...',
+  name: 'Red Team',
+  poll: 'election',
   data: '123',
   _id: 58bb40f79477c58065acc950,
   time: 2017-03-04T22:34:31.929Z }
@@ -126,33 +117,39 @@ increment.vote(ballot, function(err, results) {
 ```
 
 ### Statistics
+
+![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/canadian_poll_results.png)
+
 Generating basic statistics can be accomplished by specifying the poll to count.
-```
-increment.statistics('american', function (err, statistics) {
+
+```js
+increments.statistics('election', function (err, statistics) {
   console.log(statistics);
 });
 
 /* Statistics Output: 
-    { poll: 'american',
+
+    { poll: 'election',
       candidates: 
-        [ { name: 'Donald Trump',
+        [ { name: 'Red Team',
             color: 'red',
             count: 1,
-            id: 'donald_trump',
+            id: 'red_team',
             percentage: '100.0' },
-          { name: 'Hillary Clinton',
+          { name: 'Blue Team',
             color: 'blue',
             count: 0,
-            id: 'hillary_clinton',
+            id: 'blue_team',
             percentage: 0 } ],
       total: 1,
       projectedWinner: 
-        { name: 'Donald Trump',
+        { name: 'Red Team',
           color: 'red',
           count: 1,
-          id: 'donald_trump',
+          id: 'red_team',
           percentage: '100.0' } 
     }
+
 */
 ```
 
@@ -162,28 +159,24 @@ Expremental security features are available. It is suggusted to log a user's **I
 - Also Consider
     - Comparing ISP information by resolving the IP Address of each vote.
     - Uniqueness of geolocation provided by a third-party or the client itself.
+    - Automatically checking voting machine software for files that were modified.
     - Client specific info ( Gecko Versions, System OS, time, window size / position )
     - The time between each vote submitted. Votes in fast succession may suggest fraud.
     - Reverse-hashing each vote data to help detect database modifications.
     - Creating HTTPS layers for **POST** and **Socket.IO** routes with a [webserver proxy](http://nginx.com/blog/nginx-nodejs-websockets-socketio/). 
         -  Forwarding Ports: _8080_, _3000_ ( ex. _443, 3030_ )
-    
 
-- Enable or disable **cookies** to prevent double voting:
+- Enable/disable **browser cookies** to prevent double-voting:
+```js
+    increments.setup({ cookies: true });
 ```
-    var enableCookieProtection = false;
-    // or
-    increments.setup({ cookies: true, ... });
-```
-- Enable or disable **browser instances** to prevent double voting:
-```
-    var enableInstanceKeyProtection = true;
-    // or 
-    increments.setup({ instance: true, ... });
+- Enable/disable **browser instance keys** to prevent double-voting:
+```js
+    increments.setup({ instance: true });
 ```
 
 ## Testing
-The _Increment_ package includes application to automatically test the voting procedure. Increment uses **Selenium Webdriver** to preform rapid-fire testing by replicating how a user would cast a vote. 
+The _Increments_ package includes application to automatically test the voting procedure. Increment uses **Selenium Webdriver** to preform rapid-fire testing by replicating how a user would cast a vote. 
 
 ### Setup WebDriver
 The **webdriver-service** should only take only a moment to install. It can be installed to your system  with **NPM** or downloaded directly: http://www.seleniumhq.org/projects/webdriver/
@@ -212,19 +205,23 @@ Running 65 votes for candidate 1
 If the test runs correctly, you should see a web browser pop-up and repeatedly cast a vote for the selected candidate. The results will are tabulated on the statistics page: http://localhost:8000/statistics 
 
 ## Screenshots
-#### Statistics View (with one spoiled ballot)
-![N|Solid](https://raw.githubusercontent.com/bentbot/increment/master/screenshots/statistics.png)
+#### Voting screen
+![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/vote.png)
 
-#### The error message seen when trying to vote again.
-![N|Solid](https://raw.githubusercontent.com/bentbot/increment/master/screenshots/verification.png)
+#### Statistics View (with 1 spoiled ballot)
+![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/statistics.png)
+
+#### This error message is seen when trying to re-vote.
+![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/verification.png)
 
 ### Frameworks
 Increment uses a number of open source projects to work properly:
 
-* [Mongoose] - Mongo database driver
-* [Crypto] - for unique key generation
-* [node.js] - a self-contained webserver
+* [MySQL] - MySQL database driver
+* [Crypto] - Unique key generation
+* [node.js] - A self-contained server
 * [ExpressJS] - HTTP service for web pages
-* [jQuery] - frontend scripting
-* [MongoDB] - local or remote database server
-* [Webdriver] - automated browser testing
+* [Mongoose] - Mongo database driver
+* [MongoDB] - Local or remote database server
+* [Webdriver] - Automated browser testing
+* [jQuery] - Frontend scripting
