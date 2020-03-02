@@ -180,7 +180,8 @@ Expremental security features are available. It is suggusted to log a user's **I
 ## Testing
 
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/votes.gif)
-***Fig 3.** The Increments testing program adds votes to a local environment using Seleium Webdriver.
+
+***Fig 3.** The Increments testing program adds votes to a local environment using Seleium Webdriver.*
 
 The _Increments_ package includes application to automatically test the voting procedure. Increment uses **Selenium Webdriver** to preform rapid-fire testing by replicating how a user would cast a vote. 
 
