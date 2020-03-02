@@ -2,7 +2,7 @@
 Increments is a **database-driven** for creating  **polls** and taking **votes** for various options, candidates, or parties. Using MongoJS collections as a storage framework, Increments offers in-depth statistical data on generated polls.
 
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/canadian_poll.png)
-*A screenshot of the voting options listed in an example [Canadian elections](https://github.com/bentbot/Canada-Votes-2019) poll.*
+***Fig 1.** A screenshot of the voting options listed in an example [Canadian elections](https://github.com/bentbot/Canada-Votes-2019) poll.*
 
 ## Usage
 Install the **increments** module with NPM...
@@ -117,10 +117,10 @@ increments.vote(ballot, function(err, res) {
 ```
 
 ### Statistics
-*Canadian elections poll example: [view this project's source code.](https://github.com/bentbot/Canada-Votes-2019)*
 [
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/canadian_poll_results.png)
 ](https://github.com/bentbot/Canada-Votes-2019)
+***Fig 2.** Canadian elections poll example: [view this project's source code.](https://github.com/bentbot/Canada-Votes-2019)*
 
 Generating basic statistics can be accomplished by specifying the poll to count.
 
@@ -207,13 +207,13 @@ Running 65 votes for candidate 1
 If the test runs correctly, you should see a web browser pop-up and repeatedly cast a vote for the selected candidate. The results will are tabulated on the statistics page: http://localhost:8000/statistics 
 
 ## Example Screenshots
-#### Voting screen
+#### **Fig 3.** The voting screen:
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/vote.png)
 
-#### Statistics View (with 1 spoiled ballot)
+#### **Fig 4.** Statistics View (with 1 spoiled ballot):
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/statistics.png)
 
-#### This error message is seen when trying to re-vote.
+#### **Fig 5.** This error message is seen when trying to re-vote:
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/verification.png)
 
 ### Frameworks
