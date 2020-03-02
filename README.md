@@ -178,6 +178,10 @@ Expremental security features are available. It is suggusted to log a user's **I
 ```
 
 ## Testing
+
+![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/votes.gif)
+***Fig 3.** The Increments testing program adds votes to a local environment using Seleium Webdriver.
+
 The _Increments_ package includes application to automatically test the voting procedure. Increment uses **Selenium Webdriver** to preform rapid-fire testing by replicating how a user would cast a vote. 
 
 ### Setup WebDriver
@@ -207,13 +211,13 @@ Running 65 votes for candidate 1
 If the test runs correctly, you should see a web browser pop-up and repeatedly cast a vote for the selected candidate. The results will are tabulated on the statistics page: http://localhost:8000/statistics 
 
 ## Example Screenshots
-#### **Fig 3.** The voting screen:
+#### **Fig 4.** The voting screen:
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/vote.png)
 
-#### **Fig 4.** Statistics View (with 1 spoiled ballot):
+#### **Fig 5.** Statistics View (with 1 spoiled ballot):
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/statistics.png)
 
-#### **Fig 5.** This error message is seen when trying to re-vote:
+#### **Fig 6.** This error message is seen when trying to re-vote:
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/verification.png)
 
 ### Frameworks
