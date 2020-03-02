@@ -116,9 +116,10 @@ increments.vote(ballot, function(err, res) {
 ```
 
 ### Statistics
-
+[
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/canadian_poll_results.png)
-*[View the project source code.](https://github.com/bentbot/Canada-Votes-2019)*
+](https://github.com/bentbot/Canada-Votes-2019)
+*Example: [view this project's source code.](https://github.com/bentbot/Canada-Votes-2019)*
 
 
 Generating basic statistics can be accomplished by specifying the poll to count.
