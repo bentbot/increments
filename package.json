@@ -35,7 +35,7 @@
     "cookie-parser": "^1.4.3",
     "crypto": "0.0.3",
     "minimist": "^1.2.5",
-    "mongoose": "^4.13.20",
+    "mongoose": "^5.7.5",
     "mysql": "^2.18.1",
     "ng-socket-io": "^0.1.10"
   },
