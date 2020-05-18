@@ -2,7 +2,14 @@
 Increments is a **database-driven** for creating  **polls** and taking **votes** for various options, candidates, or parties. Using MongoJS collections as a storage framework, Increments offers in-depth statistical data on generated polls.
 
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/canadian_poll.png)
-***Fig 1.** A screenshot of the voting options listed in an example [Canadian elections](https://github.com/bentbot/Canada-Votes-2019) poll.*
+***Fig 1.** A screen-shot of the voting options listed in an example [Canadian elections](https://github.com/bentbot/Canada-Votes-2019) poll.*
+
+## Instant Gratification
+```js
+$ npm install
+$ node index.js
+```
+Modify the _index_ file for a quick & easy web-based poll that's nearly ready to deploy.
 
 ## Usage
 Install the **increments** module with NPM...

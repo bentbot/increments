@@ -1,0 +1,244 @@
+section {
+	min-height: 100%;
+    margin: 0 0 -40px;
+}
+
+p {
+	padding: 10px;
+	font-size: 22px;
+	font-family: 'Helvetica';
+	margin-top: 0;
+	padding-top: 40px;
+}
+
+.loading {
+	font-weight: bold;
+	color: gray;
+	font-family: 'Helvetica';
+	font-size: 13px;
+	text-align:  center;
+	margin: 20px 0;
+}
+
+.candidates {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	margin: 10px 0;
+}
+
+.candidate {
+	background: #afafaf;
+	display: inline-block;
+	width: 125px;
+	height: 125px;
+	color: white;
+	z-index: 10;
+	font-family: 'Helvetica';;
+	font-size: 21px;
+	text-align: center;
+	padding: 0px 5px 0 5px;
+	margin: 4px 24px 4px 4px;
+	border-width: 0px;
+	cursor: pointer;
+	outline: none;
+	overflow: hidden;
+	position: relative;
+}
+
+.candidate div {
+	vertical-align: middle;
+	display: table-cell;
+	height: 130px;
+	width: 130px;
+	text-align: center;
+	user-select: none;
+}
+
+.candidate:focus, 
+.candidate.selected {
+	margin: 0px 20px 0px 0px;
+	border-style: solid;
+	border-width: 4px;
+	background: white;
+	color: black;
+}.candidate:hover {
+
+}.candidate:active, .button.voted {
+	border-color: white;
+}
+
+.results {
+	min-height: 360px;
+}
+
+.red { background: #F44336; border-color: #F44336; color: white; }
+.blue { background: #1565C0; border-color: #1565C0; color: white; }
+.orange { background: #ff9800; border-color: #ff9800; color: white; }
+.green { background: #4caf50; border-color: #4caf50; color: white; }
+.purple { background: rgb(94, 0 , 154); border-color: rgb(94, 0 , 154); color: white; }
+.skyblue { background: #4fc3f7; border-color: #4fc3f7; color: white; }
+
+h1.red, h2.red, h3.red { 
+	color: #F44336; 
+	background: transparent;     
+	margin: 5px 0;
+}
+
+h1.blue, h2.blue, h3.blue { 
+	color: #1565C0; 
+	background: transparent;     
+	margin: 5px 0;
+}
+
+h1.orange, h2.orange, h3.orange { 
+	color: #ff9800; 
+	background: transparent;     
+	margin: 5px 0;
+}
+
+h1.green, h2.green, h3.green { 
+	color: #4caf50; 
+	background: transparent;     
+	margin: 5px 0;
+}
+
+h1.purple, h2.purple, h3.purple { 
+	color: rgb(94, 0 , 154); 
+	background: transparent;     
+	margin: 5px 0;
+}
+
+h1.skyblue, h2.skyblue, h3.skyblue { 
+	color: #4fc3f7; 
+	background: transparent;     
+	margin: 5px 0;
+}
+
+h2.projectedVotes {
+	margin: 0;
+}
+
+h2.projectedWinner {
+	margin-top: 0px;
+	padding-top: 35px;
+}
+
+form {
+	text-align: center;
+}
+
+input {
+	text-align: center;
+	font-size: 21px;
+}
+
+.button {
+	position: relative;
+	z-index: 10;
+	font-size: 22px;
+	padding: 12px 35px 9px;
+	cursor: pointer;
+	background: white;
+	border: 1px solid #d6d6d6;
+	border-radius: 3px;
+	margin-top: 10px;
+	font-weight: bold;
+	text-transform: uppercase;
+	border-width: 4px;
+	outline: none;
+	font-size: 17px;
+	background: #ffd300;
+	border: 0px solid #ccc;
+	border-radius: 0px;
+	margin-top: 10px;
+	padding: 19px 40px 16px 40px;
+	border-bottom: 2px solid #f9bf00;
+}.button:focus {
+	border-color: #ffb200;
+}.button:hover {
+	border-color: #ffb200;
+}.button:active, .button.voted {
+	background: white;
+	border-color: #ffd300;
+}
+
+
+h1 {
+	margin-top: 100px;
+	font-size: 40px;
+}
+
+ul.statistics {
+    margin: 0;
+	padding: 0;
+    left: 0%;
+    z-index: 2;
+    width: 100%;
+    bottom: -5px;
+    position: fixed;
+    background: #f3f3f3;
+}
+
+ul.statistics li {
+	display: inline-block;
+	font-family: 'Helvetica';;
+	font-size: 20px;
+	text-align: center;
+	width: 49%;
+	padding: 30px 0;
+	overflow: hidden;
+	height: 40px;
+	transition: all 0.2s linear;
+}
+
+ul.statistics li div {
+	font-size: 20px;
+}
+
+.error {
+	background: #f9ff56;
+	width: 50%;
+	margin: 0 auto;
+	text-align: center;
+	padding: 15px;
+	border-radius: 0px;
+	font-family: 'Helvetica';;
+}
+
+.bottom {
+	position: relative;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	z-index: 1;
+	padding: 10px;
+}
+
+.bottom.a {
+	bottom: 110px;
+}
+.bottom a {
+	margin-right: 10px;
+	border: none;
+	color: #707070;
+	background:  transparent;
+	font-weight: bold;
+	text-decoration: none;
+	padding: 0% 3% 0% 3%; 
+}
+
+.bottom a:hover {
+	text-decoration: underline;
+}
+
+
+@media screen and (max-height: 600px) {
+	.vote {
+		margin-bottom: 70px;
+	}
+}
+    
+
+/* Copyright Liam Hogan - Published as bentbot in 2020 */

@@ -1,146 +1,265 @@
-/* The name of the poll */
-var poll = 'canadian_election'; 
+/*** 
+ * Increments
+ * Voting Application Setup 
+ ***
+ * Please begin by running:
+ **
+ * > npm install
+ **
+ * And run this application using one of the following commands:
+ **
+ * > node index.js
+ **
+ * This will start your voting server and generate a URL and port to visit:
+ **
+ * > Listening at: http://localhost:8080
+ **
+ * Customize the candidates & poll wordings using the variables below.
+ * Changing the poll name, candidates list, and database URI will generate you polls. 
+ **
+***/
 
-/* Define Canidates */
-const candidates = [
-    { name: 'Tom Mulcair', color: 'orange' },    
-    { name: 'Justin Trudeau', color: 'red' },
-    { name: 'Andrew Scheer', color: 'blue' },
-    { name: 'Bloc Québécois', color: 'skyblue' },
-    { name: 'Independent Party', color: 'darkblue' },
-    { name: 'Green Party', color: 'green' }
-];
+	const increments = require('./lib/increments');
 
-/* Include and setup Increments */
-const increments = require('./lib/increments');
+	/* Name the poll: */
 
-/* Increments accepts a MySQL and MongoDB database. */
-increments.setup('mysql://increments:increment@localhost:3306/polls', function (err) {
-    if (err) throw (err);
-    console.log('Connecting to Database');
-});
+	const poll = 'canadian_election_2020';
+	const title = 'Federal Election';
+	const prompt = 'Who would you vote for in the Canadian federal elections?';
 
-// Add a poll with the above constants 
-increments.poll(poll, candidates);
+	/* Define the running candidates: */
 
+	let candidates = [
+		{id: 'ndp', name: 'New Democratic Party', color:'orange'},
+		{id: 'green', name: 'Green Party', color:'green'},
+		{id: 'bloc', name: 'Bloc Québécois', color:'skyblue'},
+		{id: 'liberal', name: 'Liberal Party', color:'red'},
+		{id: 'conservative', name: 'Conservative Party', color:'blue'},
+		{id: 'peoples_party', name: "People's Party", color:'purple'}
+	];
 
-/* Start webserver */ 
+	/* Connect to a MYSQL database:  */
 
-var webPort = 8000;
-var ioPort = 3000;
-
-var express = require('express');
-var app = express(); 
-var async = require('async');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var pug = require('pug');
-
-// Receive votes by accepting a posted message using bodyParser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Prevent double submissions by checking cookies with cookieParser
-app.use(cookieParser());
-
-// Add some template support
-app.set('view engine', 'pug');
-app.use(express.static('views'))
-
-
-
-/* Generate the voting screen located at localhost:8000 */
-app.get('/', function(request, responce) {
-    
-    /* Increments can create a unique browser key
-    /* Return the instance key within the POST data of a vote using the
-    /* The easiest way is to use a hidden field with the name='instance' */
-    
-    increments.getInstance(function (instance) {        
-        
-        increments.statistics(poll, function (err, results) {
-        
-            // Send the template with the defined candidates & the returned instance key 
-            responce.render('index', {candidates: candidates, instance: instance, statistics: results });
-        
-        });
-
-    });    
-    
-});
+	increments.setup({
+		// Demo Database URL:
+		db:"mysql://canadian_demo:DemoPassword@canadianelections.janglehost.com/canadian_demo",
+		roundMode: 'auto', // These are different rounding modes: float/floor/round/pure/tenth/hundredth (auto)
+		instance:false,
+		cookies: false
+	});
 
 
 
-// GET redirect to root
-app.get('/vote', function(request, responce) {
-	responce.redirect('/');
-});
 
 
-// The POST endpoint to receive a vote
-app.post('/vote', function(request, responce) { 
-    
-    /* Increments accepts an object with the following items:
-    /
-    /* 'name'       The candidate or option you are voting for
-    /* 'poll'       A poll identifier you have already defined
-    /* 'instance'   The variable generated with getInstance
-    /
-    /  Voting is accomplished first by creating an object 'ballot' with a name and a poll
-    /  Pass the instance value if necessary, then execute increments.vote(ballot)
-    */
-    
-    var ballot = {
-        name: request.body.vote,             // name of candidate (input name="vote")
-        poll: poll,                          // the name of the poll ('elections')
-        instance: request.body.instance      // hidden input (name="instance")
-    }
-    
-    /* Increments accepts the object and sends a responce to Express. */
-    increments.vote(ballot, function(err, data) {
-        if (err) throw (err);
-        responce.redirect('/statistics');
-    
-        increments.statistics(poll, function (err, results) {
-            if (err) throw (err);
-            io.sockets.emit('statistics', results);
-        })
+	/*** Settings ***/
+	
+	let IPAddressProtection		= false; // Stop double-voting by IP Addr?
+	let CookieProtection		= false; // Stop double-voting using browser cookies?
+	let AllowRevoting			= true;	// Cookie and IP protection required to be set to `false`.
+	
+	let AllowViewSource			= true; // Allow users to view the application source code.
+	let AllowDataExport			= true;	// Allow users to view exported JSON data.
+	let AllowStatistics			= true; // Allow users to view the live statistics
+	let SecureSocket			= false; // Use a https:// secure websocket. May req. cetificates.
+	let WebPort 				= 8080; // Web port to connect a browser to. Like http://localhost:8080
+	let WebSocketPort			= 3300; // Web socket port used to connect to any browsers.
+	let RunBuild 				= true; // Automatically run `ng build` upon startup. Set to `false` in production.
+	let Debug 					= false;
 
-    });
+	/* Time to start the polling application */
 
 
-    
-});
-
-// Display the statistics page
-app.get('/statistics', function( request, responce ) {
-    
-    /* Increments will return statistics with increments.statistics
-    /* Data is returned in JSON and rendered to the template.*/
-    
-    increments.statistics(poll, function (err, results) {
-        if (err) throw(err);
-        responce.render('statistics', { statistics: results } );
-    });
-    
-});
-
-// API GET Request
-app.get('/statistics/data', function( request, responce ) {
-    
-    /* Increments can return RESTfully to an API */
-    increments.statistics(poll, function (err, results) {
-        if (err) throw (err);
-        responce.send(results);
-    });
-    
-});
+	increments.poll( poll, candidates, function (err, model, candidates) {
+		if(Debug)console.log(model);
+	}, Debug);
 
 
-// Start the webserver
-var chalk = require('chalk');
-app.listen(webPort);
-console.log(chalk.green.bold('Server started listening on port: '+webPort))
+/* 0.*/
+/* Program definitions */
 
-var io = require('socket.io')(ioPort);
-// Send statistical data to IO instantly 
+  const fs = require('fs'),
+	https = require('https'),
+	io = require('socket.io')((SecureSocket)?false:WebSocketPort),
+	ca = fs.readFileSync(__dirname + '/examples/Angular-Voting-Machine/src/assets/certs/bundle.ca');
+	if (SecureSocket) {
+		server = https.createServer({
+			key: fs.readFileSync(__dirname + '/examples/Angular-Voting-Machine/src/assets/certs/priv.key'),
+			cert: fs.readFileSync(__dirname + '/examples/Angular-Voting-Machine/src/assets/certs/certificate.crt')
+		});
+		server.listen(WebSocketPort);
+  		io.listen(server);
+  	}
+
+  const express = require('express'),
+	spawn = require('child_process').spawn,
+	args = require('minimist')(process.argv.slice(2)),
+	app = express(); var build_running = false, ips = new Array();
+
+	app.use(express.static(__dirname + '/examples/Angular-Voting-Machine/dist/assets'));
+	app.use('/', express.static(__dirname + '/examples/Angular-Voting-Machine/dist'));
+
+/* 1.*/
+
+	/* Web Application */
+	app.listen(WebPort, function() {
+		console.log('Listening at: http://localhost:'+WebPort);
+	});
+
+	app.get('/', function(req, res) {
+		res.send('<meta http-equiv="refresh" content="3; url=/"><p style="font-family: sans-serif;">Application Loading... <br/> <br/> [ <a href="/">Reload</a> ]</p>');
+	});
+
+	app.get('/candidates', function(req, res) {
+		res.send( get_candidates() );
+	});
+
+	app.get('/statistics', function(req, res) {
+		increments.statistics(poll, function(l, e) {
+			res.send(e);
+		});
+	});
+	
+/* 2.*/
+
+	/* Client Connection */
+	io.on('connection', function( socket ) {
+
+		if(Debug)console.log(socket.request.connection.remoteAddress + ' connected.');
+
+		// Send the client the voting prompt & list of candidates.
+		socket.on('candidates', function() {
+			socket.emit('candidates', get_candidates() );
+		});
+
+		// Accept and process a vote.
+		socket.on('vote', function (ballot) {
+			if(!ballot || !ballot.key) return;
+			var ip = socket.request.connection.remoteAddress;
+
+			// Disallow voting if the IP address has already voted.
+			if ( ips.indexOf(ip) == -1 || IPAddressProtection == false ) {
+
+				// Add the vote to the database.
+				increments.vote({ 'poll': poll, 'name': ballot.name, 'data': ip, 'instance': ballot.key });
+
+				ips.push(ip); // Add the IP address to a list of used addresses.
+
+				socket.emit('voted', ballot.candidate);
+				socket.emit('reload',1);
+				if(Debug)console.log(ip + ' voted.');
+
+				increments.statistics(poll, function(e, stats) {
+					io.emit('statistics', stats); // Send statistics to the user.
+				});
+
+			}
+		});
+
+		// Send the client the poll statistics.
+		socket.on('statistics', function() {
+			increments.statistics(poll, function(e, stats) {
+				socket.emit('statistics', stats);
+			});
+		});
+
+		// Send the client a nonce key.
+		socket.on('nonce', function() {
+			var ip = socket.request.connection.remoteAddress;
+			if ( ips.indexOf(ip) == -1 || AllowRevoting == true ) {
+				increments.getInstance(function (instance) {
+					socket.emit('nonce', instance);
+				});
+			}
+		});
+
+	});
+
+	function get_candidates(ip) {
+		return {
+			'poll': poll,
+			'title': title,
+			'prompt': prompt,
+			'candidates': candidates,
+			'voted': (ip&&ips.indexOf(ip)==-1) ? false : (IPAddressProtection),
+			'debug': Debug,
+			'show_statistics':AllowStatistics,
+			'cookie_protection':CookieProtection,
+			'source_available':AllowViewSource,
+			'ip_address_protection':IPAddressProtection,
+			'export_available':AllowDataExport,
+			'allow_revoting': AllowRevoting
+		}
+	}
+
+/* 3.*/
+	/************************
+	* Angular build & watch program. 
+	*************************
+	* To use this program...
+	* Open ./examples/Angular-Voting-Machine/index.js instead!
+	* Thanks!
+	**
+
+	function build(Watch=0,Turned=false) {
+		if (build_running) return;
+		if (Watch){
+			fs.watch(__dirname+'/src', { recursive: true }, function(eventType, filename) {
+				build(Watch,true);
+			});
+		}
+		if ( args.render ) {
+			build_running = true; var ng;
+			if ( args.prod ) {
+				if(Debug)console.log('Building Angular (production).');
+				var arg1 = ['b', '--prod'];
+				var arg2 = ['/s', '/c', 'ng', 'b', '--prod'];
+			} else {
+				var arg1 = ['b'];
+				var arg2 = ['/s', '/c', 'ng', 'b'];
+				if(Debug)console.log('Building Angular.');
+			}
+			if (!/^win/.test(process.platform)) {// inux
+				ng = spawn('ng', arg1);
+			} else {// windows
+				ng = spawn('cmd', arg2);
+			}
+			ng.on('data', (data) => {
+				if(Debug)console.log( `ng b: ${data}` );
+			});
+			ng.on('error', function(e) {
+				if(Debug)console.log(e);
+			});
+			ng.on('close', (code) => {
+				rb = false;
+			});
+		} else {
+
+			// Build on Load:
+			// For development purposes, run `ng b` to build Angular.
+			
+			ng = spawn('ng', ['b']);
+			build_running = true;
+			if(Watch&&Turned)console.log('Rebuilding...');
+			if(Debug)console.log('Commencing Angular build process...');
+			ng.on('data', (data) => {
+				if(Debug)console.log( `ng b: ${data}` );
+			});
+			ng.on('error', function(e) {
+				if(Debug)console.log(e);
+			});
+			ng.on('close', (code) => {
+				if(Debug||!Debug)console.log(Date.now(),'A new build has been compiled.');
+				build_running = false;
+				io.emit('reload',1);
+			});
+		}
+		
+	}
+
+	*/
+
+	// Run the build
+	// if ( RunBuild ) build(true);
+
+

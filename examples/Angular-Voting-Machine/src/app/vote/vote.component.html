@@ -1,0 +1,78 @@
+<section>
+	<div class="loading" *ngIf="!loaded">Connecting to server...</div>
+	<div *ngIf="loaded">
+		<div class="vote" *ngIf="!voted && show_buttons">
+			<p>{{prompt}}</p>
+			<h2>{{pollTitle}}</h2>
+			<ul class="candidates">
+				<li *ngFor="let candidate of candidates; let i = index;" 
+					[attr.tabindex]="i" 
+					[attr.class]="(ballot.candidate==candidate.id)?'selected candidate '+candidate.color:'candidate '+candidate.color" 
+					(click)="select_vote(candidate);" (keyup)="kb($event,candidate)">
+						<div>{{ candidate.name }}</div>
+				</li>
+			</ul>
+			<form action="/vote" method="post">
+				<input class="vote" type="hidden" [(ngModel)]="ballot.candidate" id="vote" name="vote" /> 
+				<input class="signature" type="hidden" [(ngModel)]="ballot.instance" name="instance" />
+				<br/>
+				<input 	(click)="vote(ballot)" 
+					[attr.title]="ballot?'Cast a ballot for: '+ballot.name:''" 
+					[attr.class]="(ballot.voted?'voted button ':'button ')+ballot.color" 
+					type="submit" id="submit" value="Cast Your Vote"/>
+			</form>
+		</div>
+		<div *ngIf="voted && show_buttons">
+			<p> <b>Thank you.</b> You have voted in the: </p>
+			<h2>{{pollTitle}}</h2>
+			<ul class="candidates">
+				<li *ngFor="let candidate of candidates; let i = index;" 
+					[attr.class]="(voted==candidate.id)?'selected candidate '+candidate.color:'candidate '+candidate.color">
+						<div>{{ candidate.name }}</div>
+				</li>
+			</ul>
+		</div>
+		<div *ngIf="statistics && allow_statistics">
+			<div *ngIf="statistics.total == 0 && (!show_buttons||voted)"><h2>No Statistics</h2></div>
+			<div class="results" *ngIf="statistics.total >  0 && (!show_buttons||voted)" >
+				<h2 class="projectedWinner">Projected Winner:</h2>
+				<h1 [attr.class]="statistics.projectedWinner.color">
+					{{statistics.projectedWinner.name}}
+				</h1>
+				<p>Votes: {{statistics.projectedWinner.count}} ({{statistics.projectedWinner.percentage}}%)</p>
+			</div>
+			<ul class="statistics">
+				<li *ngFor="let candidate of statistics.candidates" 
+					title="{{candidate.name}}: {{candidate.count}} {{candidate.count==1?'Vote':'Votes'}} ({{candidate.percentage}}%)"
+					[attr.id]="candidate.id" 
+					[attr.class]="candidate.color" 
+					[style.width.%]="(candidate.percentage>0)?candidate.percentage:0" 
+					[attr.data-count]="candidate.count">
+					<div class="name">{{ candidate.name }}</div>
+					<div class="count">{{ candidate.count }}</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="push"></div>
+</section>
+
+<div class="footer">
+	<div [attr.class]="(statistics&&allow_statistics)?'bottom a':'bottom'">
+		<a *ngIf="view_source" href="https://github.com/bentbot/Canada-Votes-2019" title="GitHub" aria-label="This application available for free on GitHub." class="button">
+			<span>Source</span>
+		</a>
+		<a *ngIf="!show_buttons && allow_revote" href="#vote" class="button" title="Re-Vote" aria-label="Go to the voting screen." (click)="voting_screen();">
+			<span>Voting Screen</span>
+		</a>
+		<a *ngIf="allow_revote && voted && show_buttons" href="#vote" title="Re-Vote" aria-label="Vote in this poll again." class="button" (click)="voting_screen();">
+			<span>Vote Again</span>
+		</a>
+		<a *ngIf="allow_statistics && show_buttons" href="#statistics" title="View Poll Statistics" aria-label="Go to this poll's statistics." class="button" (click)="show_statistics();">
+			<span>Statistics</span>
+		</a>
+		<a *ngIf="export_data" href="/statistics" title="Export JSON Data" aria-label="Export statistics." class="button">
+			<span>JSON</span>
+		</a>
+	</div>
+</div>

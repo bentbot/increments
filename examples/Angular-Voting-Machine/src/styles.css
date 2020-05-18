@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+html, body,app-root,vote {
+  height: 100%;
+  margin: 0;
+}
+body {
+	background: #f3f3f3;
+	text-align: center;
+}
+
+a, h1, h2, h3, h4 {
+	text-align: center;
+	font-family: sans-serif;
+}
+.footer,.push {
+  height: 40px;
+}

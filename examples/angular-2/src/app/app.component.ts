@@ -7,6 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-	voted = 'No';
-
 }
+// Increments - L. Hogan - 2020
