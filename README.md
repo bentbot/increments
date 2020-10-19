@@ -84,6 +84,9 @@ let increments = require('increments');
 increments.setup('mysql://increments:<password>@localhost:3306/polls');
 ```
 
+Tip: For large installations with +100 million increments, add the 'name' field to the primary key of your poll table.
+
+
 ### Modifying Candidates
 The first few lines of `index.js` define the **candidates** and basic security settings. 
 
