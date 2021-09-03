@@ -114,6 +114,7 @@ driver.quit();
 function showHelp() {
 	console.log('Welcome to...');
 	console.log(chalk.bold('\n┬┌┐┌┌─┐┬─┐┌─┐┌┬┐┌─┐┌┐┌┌┬┐\n│││││  ├┬┘├┤ │││├┤ │││ │ \n┴┘└┘└─┘┴└─└─┘┴ ┴└─┘┘└┘ ┴ \n				'));
+	console.log('\nFor example uses only. Incrementing votes to a legitimate poll using this program is a violation of federal and local laws.\n');
 	console.log(chalk.bold('You can add any of these command arguments to change the results of the test.'));
 	console.log('-c  --candidate  1 		Select the candidate number by number');
 	console.log('-n  --numerations 100 		Set the number of votes');
