@@ -20,7 +20,7 @@
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
-    "async": "^3.2.0",
+    "async": "^3.2.2",
     "child_process": "^1.0.2",
     "core-js": "^2.4.1",
     "express": "^4.17.1",
