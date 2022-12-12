@@ -23,7 +23,7 @@
     "async": "^3.2.0",
     "child_process": "^1.0.2",
     "core-js": "^2.4.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "ng-socket-io": "^0.1.10",
     "ng2-cookies": "^1.0.12",
     "rxjs": "^5.1.0",
