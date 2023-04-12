@@ -4,6 +4,8 @@ Increments is a **database-driven** for creating  **polls** and taking **votes**
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/canadian_poll.png)
 ***Fig 1.** A screen-shot of the voting options listed in an example [Canadian elections](https://github.com/bentbot/Canada-Votes-2019) poll.*
 
+**[Elections Demo](http://canadianelections.janglehost.com/)**
+
 ## Instant Gratification
 ```js
 $ npm install
